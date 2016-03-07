@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7FD0C9DF1C77049C008CBAEE"
+               BlueprintIdentifier = "7F057DA41C8D6B28003DA3C7"
                BuildableName = "AZXTallyBook.app"
                BlueprintName = "AZXTallyBook"
                ReferencedContainer = "container:AZXTallyBook.xcodeproj">
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7FD0C9F81C77049C008CBAEE"
+               BlueprintIdentifier = "7F057DC01C8D6B28003DA3C7"
                BuildableName = "AZXTallyBookTests.xctest"
                BlueprintName = "AZXTallyBookTests"
                ReferencedContainer = "container:AZXTallyBook.xcodeproj">
@@ -42,7 +42,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7FD0CA031C77049C008CBAEE"
+               BlueprintIdentifier = "7F057DCB1C8D6B28003DA3C7"
                BuildableName = "AZXTallyBookUITests.xctest"
                BlueprintName = "AZXTallyBookUITests"
                ReferencedContainer = "container:AZXTallyBook.xcodeproj">
@@ -52,7 +52,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7FD0C9DF1C77049C008CBAEE"
+            BlueprintIdentifier = "7F057DA41C8D6B28003DA3C7"
             BuildableName = "AZXTallyBook.app"
             BlueprintName = "AZXTallyBook"
             ReferencedContainer = "container:AZXTallyBook.xcodeproj">
@@ -75,7 +75,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7FD0C9DF1C77049C008CBAEE"
+            BlueprintIdentifier = "7F057DA41C8D6B28003DA3C7"
             BuildableName = "AZXTallyBook.app"
             BlueprintName = "AZXTallyBook"
             ReferencedContainer = "container:AZXTallyBook.xcodeproj">
@@ -94,7 +94,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7FD0C9DF1C77049C008CBAEE"
+            BlueprintIdentifier = "7F057DA41C8D6B28003DA3C7"
             BuildableName = "AZXTallyBook.app"
             BlueprintName = "AZXTallyBook"
             ReferencedContainer = "container:AZXTallyBook.xcodeproj">

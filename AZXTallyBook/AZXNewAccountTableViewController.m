@@ -10,7 +10,6 @@
 
 @interface AZXNewAccountTableViewController () <UITextViewDelegate, UITextFieldDelegate>
 
-
 @property (weak, nonatomic) IBOutlet UITextField *moneyTextField;
 
 @property (weak, nonatomic) IBOutlet UILabel *typeLabel;
