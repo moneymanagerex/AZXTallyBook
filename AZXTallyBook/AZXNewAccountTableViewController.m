@@ -7,9 +7,9 @@
 //
 
 #import "AZXNewAccountTableViewController.h"
+#import "AZXAccountMO.h"
 
 @interface AZXNewAccountTableViewController () <UITextViewDelegate, UITextFieldDelegate>
-
 
 @property (weak, nonatomic) IBOutlet UITextField *moneyTextField;
 
@@ -37,9 +37,12 @@
     dateFormatter.dateFormat = @"yyyy-MM-dd";
     self.dateLabel.text = [dateFormatter stringFromDate:[NSDate date]];
     
+    // 自定义返回按钮
+    [self customizeBackButton];
+    
     //利用textView的delegate实现其placeholder
     self.detailTextView.delegate = self;
-    self.detailTextView.text = @"详细描述";
+    self.detailTextView.text = @"详细描述(选填)";
     self.detailTextView.textColor = [UIColor lightGrayColor];
     
     
@@ -49,9 +52,52 @@
     self.moneyTextField.delegate = self;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    // 视图消失时，判断是否有代理且实现了代理方法
+    // 若实现了，将date传过去
+    if (self.delegate && [self.delegate respondsToSelector:@selector(viewController:didPassDate:)]) {
+        [self.delegate viewController:self didPassDate:self.dateLabel.text];
+    }
+}
+
+#pragma mark - customize back button
+
+- (void)customizeBackButton {
+    //UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    // 将button的文字改为日期
+    //[button setTitle:self.dateLabel.text forState:UIControlStateNormal];
+    // 设置返回按钮的触发事件
+    //[button addTarget:self action:@selector(backBarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    //UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(backBarButtonPressed:)];
+    //UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(backBarButtonPressed:)];
+    self.navigationItem.leftBarButtonItem = backItem;
+}
+
+- (void)backBarButtonPressed:(UIButton *)sender {
+    if ([self.typeLabel.text isEqualToString:@"type"] || [self.moneyTextField.text  isEqualToString:@"0"]) {
+        // type和money都是必填的，如果有一个没填，则弹出AlertController提示
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"金钱数额和类型都是必填的" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}];
+        
+        [alertController addAction:action];
+        
+        // 弹出alertController之前先将所有的键盘收回，否则会导致之后键盘不响应
+        [self.moneyTextField resignFirstResponder];
+        [self.detailTextView resignFirstResponder];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+    } else {
+        // 若是必填项都已填好，则将属性保存在CoreData中
+        AZXAccountMO *account = [[AZXAccountMO alloc] init];
+        [account insertNewObjectWithType:self.typeLabel.text
+                                  Detail:self.detailTextView.text
+                                   Money:self.moneyTextField.text
+                                 AndDate:self.dateLabel.text];
+    }
 }
 
 #pragma mark - Table view data source
@@ -97,6 +143,8 @@
             self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(dateSelected)];
         }
         self.navigationItem.rightBarButtonItem = self.doneButton;
+        // 并将左边的保存按钮暂时隐藏起来
+        [self.navigationItem.leftBarButtonItem setTitle:@""];
         
         //添加监听事件
         [self.datePicker addTarget:self action:@selector(datePickerValueDidChanged:) forControlEvents:UIControlEventValueChanged];
@@ -126,13 +174,15 @@
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 
+    //恢复左边的保存按钮
+    [self.navigationItem.leftBarButtonItem setTitle:@"保存"];
 }
 
 #pragma mark - detail text View delegate methods
 
 //利用delegate方法实现textView的placeholder
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    if ([textView.text isEqualToString: @"详细描述"]) {
+    if ([textView.text isEqualToString: @"详细描述(选填)"]) {
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
     }
@@ -146,7 +196,7 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:@""]) {
-        textView.text = @"详细描述";
+        textView.text = @"详细描述(选填)";
         textView.textColor = [UIColor lightGrayColor];
     }
 }

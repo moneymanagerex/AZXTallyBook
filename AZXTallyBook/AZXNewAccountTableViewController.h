@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class AZXNewAccountTableViewController;
+
+@protocol PassingDateDelegate <NSObject>;
+@optional
+- (void)viewController:(AZXNewAccountTableViewController *)controller didPassDate:(NSString *)date;
+// 使用代理将date值传给首页(让其筛选Fetch的managedObject)
+@end
+
 @interface AZXNewAccountTableViewController : UITableViewController
+
+@property (nonatomic, weak) id<PassingDateDelegate> delegate;
 
 @end
