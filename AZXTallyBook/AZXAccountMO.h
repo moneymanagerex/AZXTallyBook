@@ -18,9 +18,12 @@
 
 @property (nonatomic, strong) NSString *type;
 
+@property (nonatomic, strong) NSString *incomeType;
+
 - (void)insertNewObjectWithType:(NSString *)type
                          Detail:(NSString *)detail
                           Money:(NSString *)money
-                        AndDate:(NSString *)date;
+                           Date:(NSString *)date
+                  AndIncomeType:(NSString *)incomeType;
 
 @end

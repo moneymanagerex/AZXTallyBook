@@ -8,8 +8,10 @@
 
 #import "AZXNewAccountTableViewController.h"
 #import "AZXAccountMO.h"
+#import "AppDelegate.h"
+#import "AZXAccountViewController.h"
 
-@interface AZXNewAccountTableViewController () <UITextViewDelegate, UITextFieldDelegate>
+@interface AZXNewAccountTableViewController () <UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *moneyTextField;
 
@@ -21,24 +23,36 @@
 
 @property (strong, nonatomic) UIDatePicker *datePicker; //日期选择器
 
+@property (strong, nonatomic) UIPickerView *pickerView; // 类型选择器
+
+@property (strong, nonatomic) NSString *incomeType; //收入(income)还是支出(expense)
+
 @property (strong, nonatomic) UIBarButtonItem *doneButton;
 
 @property (strong, nonatomic) UIView *shadowView; // 插入的灰色夹层
+
+@property (strong, nonatomic) NSUserDefaults *userDefaults;
+
+@property (strong, nonatomic) NSMutableArray *incomeArray; // 分别用来储存两种类型的种类
+
+@property (strong, nonatomic) NSMutableArray *expenseArray;
 
 @end
 
 @implementation AZXNewAccountTableViewController
 
+#pragma mark - view did load
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     //日期显示默认为当前日期
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy-MM-dd";
     self.dateLabel.text = [dateFormatter stringFromDate:[NSDate date]];
     
     // 自定义返回按钮
-    [self customizeBackButton];
+    [self customizeLeftButton];
     
     //利用textView的delegate实现其placeholder
     self.detailTextView.delegate = self;
@@ -59,20 +73,15 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(viewController:didPassDate:)]) {
         [self.delegate viewController:self didPassDate:self.dateLabel.text];
     }
+    
 }
 
-#pragma mark - customize back button
+#pragma mark - customize left button
 
-- (void)customizeBackButton {
-    //UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-    // 将button的文字改为日期
-    //[button setTitle:self.dateLabel.text forState:UIControlStateNormal];
-    // 设置返回按钮的触发事件
-    //[button addTarget:self action:@selector(backBarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(backBarButtonPressed:)];
-    //UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(backBarButtonPressed:)];
-    self.navigationItem.leftBarButtonItem = backItem;
+- (void)customizeLeftButton {
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonPressed:)];
+    
+    self.navigationItem.leftBarButtonItem = leftItem;
 }
 
 - (void)backBarButtonPressed:(UIButton *)sender {
@@ -92,11 +101,19 @@
         
     } else {
         // 若是必填项都已填好，则将属性保存在CoreData中
-        AZXAccountMO *account = [[AZXAccountMO alloc] init];
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Account" inManagedObjectContext:[appDelegate managedObjectContext]];
+        
+        AZXAccountMO *account = [[AZXAccountMO alloc] initWithEntity:entity insertIntoManagedObjectContext:[appDelegate managedObjectContext]];
+
         [account insertNewObjectWithType:self.typeLabel.text
                                   Detail:self.detailTextView.text
                                    Money:self.moneyTextField.text
-                                 AndDate:self.dateLabel.text];
+                                    Date:self.dateLabel.text
+                           AndIncomeType:self.incomeType];
+        
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 
@@ -132,22 +149,75 @@
             [self.view addSubview:self.datePicker];
         }
         
-        //插入一个浅灰色的夹层
-        [self insertGrayView];
-        
-        //点击datePicker外的灰色夹层也视为确认日期
-        [self.shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dateSelected)]];
-        
-        //导航栏右边添加“完成”按钮
-        if (self.doneButton == nil) {
-            self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(dateSelected)];
-        }
-        self.navigationItem.rightBarButtonItem = self.doneButton;
-        // 并将左边的保存按钮暂时隐藏起来
-        [self.navigationItem.leftBarButtonItem setTitle:@""];
+        // 插入夹层以及加入按钮
+        [self insertShadowViewAndButton];
         
         //添加监听事件
         [self.datePicker addTarget:self action:@selector(datePickerValueDidChanged:) forControlEvents:UIControlEventValueChanged];
+    } else if (indexPath.section == 0 && indexPath.row == 1) {
+        // 第一次进入应用时，设置pickerView的默认数据
+        [self setDefaultDataForPickerView];
+
+        // 初始化一个pickerView并使其居中
+        if (self.pickerView == nil) {
+            self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 300, 180)];
+            self.pickerView.center = self.view.center;
+            self.pickerView.backgroundColor = [UIColor whiteColor];
+            [self.view addSubview:self.pickerView];
+        } else {
+            [self.view addSubview:self.pickerView];
+        }
+        
+        // 设置delegate
+        self.pickerView.delegate = self;
+        self.pickerView.dataSource = self;
+        
+        // 插入夹层以及加入按钮
+        [self insertShadowViewAndButton];
+        
+    }
+}
+
+#pragma mark - insert shadow view and add button
+
+- (void)insertShadowViewAndButton {
+    //插入一个浅灰色的夹层
+    [self insertGrayView];
+    
+    //点击picker外的灰色夹层也视为确认
+    [self.shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pickerSelected)]];
+    
+    //导航栏右边添加“完成”按钮
+    if (self.doneButton == nil) {
+        self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(pickerSelected)];
+    }
+    self.navigationItem.rightBarButtonItem = self.doneButton;
+    // 并将左边的保存按钮暂时隐藏起来
+    [self.navigationItem.leftBarButtonItem setTitle:@""];
+}
+
+#pragma mark - set data for pickerView
+
+- (void)setDefaultDataForPickerView {
+    // 创建userDefault单例对象
+    self.userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    // 从userDefault中获取数据
+    self.incomeArray = [self.userDefaults objectForKey:@"income"];
+    self.expenseArray = [self.userDefaults objectForKey:@"expense"];
+    
+    if (self.incomeArray.count == 0 || self.expenseArray.count == 0) {
+        //若第一次进入应用，则为其设置默认的收入支出种类
+        self.incomeArray = [NSMutableArray arrayWithArray:@[@"工资薪酬", @"奖金福利", @"生意经营", @"金融投资", @"彩票中奖", @"银行利息", @"其他收入"]];
+        self.expenseArray = [NSMutableArray arrayWithArray:@[@"餐饮消费", @"外出聚餐", @"交通路费", @"日常用品", @"服装首饰", @"学习教育", @"烟酒消费", @"房租水电", @"运动健身", @"电子产品", @"化妆用品", @"医疗体检", @"外出旅游", @"其他消费"]];
+        
+        // 保存至userDefaults中
+        [self.userDefaults setObject:self.incomeArray forKey:@"income"];
+        [self.userDefaults setObject:self.expenseArray forKey:@"expense"];
+    }
+    // 将incomeType默认为支出
+    if (self.incomeType == nil) {
+        self.incomeType = @"expense";
     }
 }
 
@@ -160,19 +230,25 @@
     self.dateLabel.text = [dateFormatter stringFromDate:sender.date];
 }
 
-#pragma mark - date selected
+#pragma mark - picker selected
 
-- (void)dateSelected {
+- (void)pickerSelected {
     self.navigationItem.rightBarButtonItem = nil;
-    [self.datePicker removeFromSuperview];
-    
-    //移除遮挡层并销毁
-    [self.shadowView removeFromSuperview];
-    self.shadowView = nil;
     
     //取消此行的选择状态
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    //根据点击的indexPath确定是datePicker还是pickerView
+    if (indexPath.row == 1) {
+        [self.pickerView removeFromSuperview];
+    } else if (indexPath.row == 2) {
+        [self.datePicker removeFromSuperview];
+    }
+    
+    //移除遮挡层并销毁
+    [self.shadowView removeFromSuperview];
+    self.shadowView = nil;
 
     //恢复左边的保存按钮
     [self.navigationItem.leftBarButtonItem setTitle:@"保存"];
@@ -242,7 +318,71 @@
     self.shadowView.backgroundColor = [UIColor grayColor];
     self.shadowView.alpha = 0.5;
     [self.view addSubview:self.shadowView];
-    [self.view bringSubviewToFront:self.datePicker];
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    if (indexPath.row == 1) {
+        [self.view bringSubviewToFront:self.pickerView];
+    } else if (indexPath.row == 2) {
+        [self.view bringSubviewToFront:self.datePicker];
+    }
+}
+
+#pragma mark - UIPickerView dataSource
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 2;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    if (component == 0) {
+        return 2; // 左侧的需要收入与支出两行
+    } else {
+        // 根据类型不同提供不同的行数
+        if ([self.incomeType isEqualToString:@"income"]) {
+            return self.incomeArray.count;
+        } else if ([self.incomeType isEqualToString:@"expense"]) {
+            return self.expenseArray.count;
+        } else {
+            return 0;
+        }
+    }
+}
+
+#pragma mark - UIPickerView delegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    if (component == 0) { // 默认第一行为支出
+        if (row == 0) {
+            return @"支出";
+        } else {
+            return @"收入";
+        }
+    } else {
+        // 根据收入支出类型不同分别返回不同的数据
+        if ([self.incomeType isEqualToString:@"income"]) {
+            return self.incomeArray[row];
+        } else {
+            return self.expenseArray[row];
+        }
+    }
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    if (component == 0) {
+        // 选择不同种类时改变incomeType值，以使得dataSource方法中得以判断右边需要多少行
+        if (row == 0) {
+            self.incomeType = @"expense";
+        } else {
+            self.incomeType = @"income";
+        }
+        [self.pickerView reloadComponent:1];
+    } else {
+        if ([self.incomeType isEqualToString:@"income"]) {
+            self.typeLabel.text = self.incomeArray[row];
+        } else {
+            self.typeLabel.text = self.expenseArray[row];
+        }
+    }
 }
 
 /*

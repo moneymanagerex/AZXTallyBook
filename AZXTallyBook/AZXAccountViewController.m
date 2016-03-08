@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import "AZXAccountTableViewCell.h"
 #import "AZXNewAccountTableViewController.h"
+#import "AZXAccountMO.h"
 
 @interface AZXAccountViewController () <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource, PassingDateDelegate>
 
@@ -29,17 +30,22 @@
 
 @implementation AZXAccountViewController
 
+// navigation控制时从下一界面返回时不会再次调用viewDidLoad，应用viewWillAppear
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.accountTableView.delegate = self;
     self.accountTableView.dataSource = self;
-    
-    [self initializeFetchedResultsController];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     if (self.passedDate) { // 将控制器的标题设为当前日期
         self.title = self.passedDate;
     }
+
+    [self initializeFetchedResultsController];
+
 }
 
 - (void)initializeFetchedResultsController {
@@ -64,29 +70,38 @@
         NSLog(@"Failed to initiialize FetchedResultsController: %@\n%@", [error localizedDescription], [error userInfo]);
         abort();
     }
+    //NSArray *hehe = [moc executeFetchRequest:request error:&error];
+    //NSLog(@"%@", [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]);
+    id object = [[self fetchedResultsController] fetchedObjects];
+    NSLog(@"hehe:%@", object);
 }
 
 #pragma mark - UITableViewDataSource
 
 - (void)configureCell:(AZXAccountTableViewCell *)cell atIndexPath:(NSIndexPath*)indexPath {
-    id object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    cell.typeName.text = [object valueForKey:@"type"];
-    cell.money.text = [object valueForKey:@"money"];
+    AZXAccountMO *account = [[self fetchedResultsController] fetchedObjects][indexPath.row];
+    id object = [[self fetchedResultsController] fetchedObjects];
+    NSLog(@"object: %@ account: %@", object, account);
+    cell.typeName.text = account.type;
+    cell.money.text = account.money;
     //cell.typeImage.image = [UIImage imageNamed:cell.typeName.text]; !!!!!!!!!!!!
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"cellForRowAtIndexPath");
     AZXAccountTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"accountCell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    NSLog(@"numberOfSectionsInTableView: %lu", [[[self fetchedResultsController] sections] count]);
     return [[[self fetchedResultsController] sections] count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     id< NSFetchedResultsSectionInfo> sectionInfo = [[self fetchedResultsController] sections][section];
+    NSLog(@"numberOfRowsInSection: %lu", [sectionInfo numberOfObjects]);
     return [sectionInfo numberOfObjects];
 }
 
@@ -97,6 +112,7 @@
 }
 
 -(void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    NSLog(@"type:%lu", (unsigned long)type);
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [[self accountTableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -129,7 +145,7 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue destinationViewController] isKindOfClass:[AZXNewAccountTableViewController class]]) {
+    if ([[segue destinationViewController] isKindOfClass:[AZXNewAccountTableViewController class]]) {  // segue时将self设为AZXNewAccountTableViewController的代理
         AZXNewAccountTableViewController *viewController = [segue destinationViewController];
         viewController.delegate = self;
     }

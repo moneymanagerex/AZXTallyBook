@@ -3,10 +3,11 @@
     <entity name="Account" representedClassName="AZXAccountMO" syncable="YES">
         <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="incomeType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="money" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Account" positionX="-36" positionY="9" width="128" height="105"/>
+        <element name="Account" positionX="-36" positionY="9" width="128" height="120"/>
     </elements>
 </model>

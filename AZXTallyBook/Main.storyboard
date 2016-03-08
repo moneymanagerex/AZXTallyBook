@@ -166,32 +166,33 @@
                                         <rect key="frame" x="0.0" y="149" width="600" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RAA-EX-aku" id="ISy-I9-RTX">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="49.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="类别" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVq-Wk-GDt">
                                                     <rect key="frame" x="8" y="14" width="34" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="34" id="J3h-9p-Oig"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="type" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqh-NA-vIx">
-                                                    <rect key="frame" x="550" y="14" width="42" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="42" id="pLN-3w-E8K"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="50" y="14" width="542" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="centerY" secondItem="ISy-I9-RTX" secondAttribute="centerY" id="5br-Jd-a2J"/>
-                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="firstBaseline" secondItem="mVq-Wk-GDt" secondAttribute="firstBaseline" id="JMi-CO-KcS"/>
-                                                <constraint firstItem="mVq-Wk-GDt" firstAttribute="baseline" secondItem="Qqh-NA-vIx" secondAttribute="baseline" id="NY9-ix-zTl"/>
-                                                <constraint firstItem="mVq-Wk-GDt" firstAttribute="leading" secondItem="ISy-I9-RTX" secondAttribute="leadingMargin" id="SEJ-cb-VkY"/>
-                                                <constraint firstItem="mVq-Wk-GDt" firstAttribute="top" secondItem="ISy-I9-RTX" secondAttribute="topMargin" constant="6" id="cLu-GU-eAi"/>
-                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="trailing" secondItem="ISy-I9-RTX" secondAttribute="trailingMargin" id="drW-8q-0DM"/>
+                                                <constraint firstItem="mVq-Wk-GDt" firstAttribute="leading" secondItem="ISy-I9-RTX" secondAttribute="leadingMargin" id="5iC-Wj-avX"/>
+                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="trailing" secondItem="ISy-I9-RTX" secondAttribute="trailingMargin" id="8mP-SP-u7T"/>
+                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="firstBaseline" secondItem="mVq-Wk-GDt" secondAttribute="firstBaseline" id="Ux9-zO-HNw"/>
+                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="leading" secondItem="mVq-Wk-GDt" secondAttribute="trailing" constant="8" symbolic="YES" id="ZRj-Hv-VhI"/>
+                                                <constraint firstItem="mVq-Wk-GDt" firstAttribute="top" secondItem="ISy-I9-RTX" secondAttribute="topMargin" constant="6" id="dwl-i6-3Mr"/>
+                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="centerY" secondItem="ISy-I9-RTX" secondAttribute="centerY" id="uPH-ya-eI5"/>
+                                                <constraint firstItem="Qqh-NA-vIx" firstAttribute="baseline" secondItem="mVq-Wk-GDt" secondAttribute="baseline" id="xvW-N3-mE2"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
