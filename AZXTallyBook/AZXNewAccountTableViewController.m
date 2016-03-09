@@ -211,7 +211,7 @@
     if (self.incomeArray.count == 0 || self.expenseArray.count == 0) {
         //若第一次进入应用，则为其设置默认的收入支出种类
         self.incomeArray = [NSMutableArray arrayWithArray:@[@"工资薪酬", @"奖金福利", @"生意经营", @"金融投资", @"彩票中奖", @"银行利息", @"其他收入"]];
-        self.expenseArray = [NSMutableArray arrayWithArray:@[@"餐饮消费", @"外出聚餐", @"交通路费", @"日常用品", @"服装首饰", @"学习教育", @"烟酒消费", @"房租水电", @"运动健身", @"电子产品", @"化妆用品", @"医疗体检", @"外出旅游", @"其他消费"]];
+        self.expenseArray = [NSMutableArray arrayWithArray:@[@"日常餐饮", @"外出聚餐", @"交通路费", @"日常用品", @"服装首饰", @"学习教育", @"烟酒消费", @"房租水电", @"运动健身", @"电子产品", @"化妆用品", @"医疗体检", @"外出旅游", @"其他消费"]];
         
         // 保存至userDefaults中
         [self.userDefaults setObject:self.incomeArray forKey:@"income"];
@@ -374,10 +374,10 @@
         // 选择不同种类时改变incomeType值，以使得dataSource方法中得以判断右边需要多少行,并改变moneyTextField的字体颜色
         if (row == 0) {
             self.incomeType = @"expense";
-            self.moneyTextField.tintColor = [UIColor redColor];
+            self.moneyTextField.textColor = [UIColor redColor];
         } else {
             self.incomeType = @"income";
-            self.moneyTextField.tintColor = [UIColor greenColor];
+            self.moneyTextField.textColor = [UIColor greenColor];
         }
         [self.pickerView reloadComponent:1];
     } else {

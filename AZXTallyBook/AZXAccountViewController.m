@@ -6,11 +6,6 @@
 //  Copyright © 2016年 azx. All rights reserved.
 //
 
-// 1.Fetch也许需要一个predicate来限制其只fetch今天的日期 ~
-// 2.说到日期又要实现页面上方显示日期 ~
-// 3.接下来就处理另一个界面添加Account到CoreData了
-// 4.这边应该能用了吧。。。
-
 #import "AZXAccountViewController.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
@@ -43,6 +38,7 @@
     // 取得managedObjectContext
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = appDelegate.managedObjectContext;
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -50,6 +46,11 @@
     
     if (self.passedDate) { // 将控制器的标题设为当前日期
         self.title = self.passedDate;
+    } else {
+        // 刚打开应用时，将passedDate设为当前日期(为了在fetchAccount时能筛选并展示当天的账单)
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy-MM-dd";
+        self.passedDate = [dateFormatter stringFromDate:[NSDate date]];
     }
     
     [self fetchAccounts];
@@ -63,7 +64,6 @@
     
     NSError *error = nil;
     self.fetchedResults = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:request error:&error]];
-    NSLog(@"%@", self.fetchedResults);
 }
 
 #pragma mark - UITableViewDataSource
