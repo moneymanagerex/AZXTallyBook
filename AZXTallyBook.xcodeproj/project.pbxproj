@@ -18,7 +18,8 @@
 		7F057DE61C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F057DE11C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m */; };
 		7F057DE81C8D6B8E003DA3C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */; };
 		7F057DED1C8DA504003DA3C7 /* AZXAccountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F057DEC1C8DA504003DA3C7 /* AZXAccountTableViewCell.m */; };
-		7FF230331C8E75890065F312 /* AZXAccountMO.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230321C8E75890065F312 /* AZXAccountMO.m */; };
+		7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */; };
+		7FF2307D1C8FC4200065F312 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF2307B1C8FC4200065F312 /* Account.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,8 +61,10 @@
 		7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		7F057DEB1C8DA504003DA3C7 /* AZXAccountTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXAccountTableViewCell.h; sourceTree = "<group>"; };
 		7F057DEC1C8DA504003DA3C7 /* AZXAccountTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAccountTableViewCell.m; sourceTree = "<group>"; };
-		7FF230311C8E75890065F312 /* AZXAccountMO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXAccountMO.h; sourceTree = "<group>"; };
-		7FF230321C8E75890065F312 /* AZXAccountMO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAccountMO.m; sourceTree = "<group>"; };
+		7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account+CoreDataProperties.h"; sourceTree = "<group>"; };
+		7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Account+CoreDataProperties.m"; sourceTree = "<group>"; };
+		7FF2307A1C8FC4200065F312 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
+		7FF2307B1C8FC4200065F312 /* Account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Account.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,8 +187,10 @@
 		7FF230341C8E75960065F312 /* managedObject */ = {
 			isa = PBXGroup;
 			children = (
-				7FF230311C8E75890065F312 /* AZXAccountMO.h */,
-				7FF230321C8E75890065F312 /* AZXAccountMO.m */,
+				7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */,
+				7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */,
+				7FF2307A1C8FC4200065F312 /* Account.h */,
+				7FF2307B1C8FC4200065F312 /* Account.m */,
 			);
 			name = managedObject;
 			sourceTree = "<group>";
@@ -323,13 +328,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FF2307D1C8FC4200065F312 /* Account.m in Sources */,
 				7F057DED1C8DA504003DA3C7 /* AZXAccountTableViewCell.m in Sources */,
 				7F057DE51C8D6B8E003DA3C7 /* AZXAccountViewController.m in Sources */,
-				7FF230331C8E75890065F312 /* AZXAccountMO.m in Sources */,
 				7F057DB61C8D6B28003DA3C7 /* AZXTallyBook.xcdatamodeld in Sources */,
 				7F057DAD1C8D6B28003DA3C7 /* AppDelegate.m in Sources */,
 				7F057DAA1C8D6B28003DA3C7 /* main.m in Sources */,
 				7F057DE61C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m in Sources */,
+				7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,10 +468,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AZXTallyBook/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.azxccmu.AZXTallyBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -473,6 +481,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AZXTallyBook/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.azxccmu.AZXTallyBook;

@@ -16,15 +16,19 @@
 #import "AppDelegate.h"
 #import "AZXAccountTableViewCell.h"
 #import "AZXNewAccountTableViewController.h"
-#import "AZXAccountMO.h"
+#import "Account.h"
 
-@interface AZXAccountViewController () <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource, PassingDateDelegate>
+@interface AZXAccountViewController () <UITableViewDelegate, UITableViewDataSource, PassingDateDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *accountTableView;
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @property (nonatomic, strong) NSString *passedDate; // 从新建账单处传来的date值，用做Predicate筛选Fetch的ManagedObject
+
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+@property (nonatomic, strong) NSMutableArray *fetchedResults;
 
 @end
 
@@ -35,6 +39,10 @@
     [super viewDidLoad];
     self.accountTableView.delegate = self;
     self.accountTableView.dataSource = self;
+    
+    // 取得managedObjectContext
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = appDelegate.managedObjectContext;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -43,97 +51,44 @@
     if (self.passedDate) { // 将控制器的标题设为当前日期
         self.title = self.passedDate;
     }
-
-    [self initializeFetchedResultsController];
-
+    
+    [self fetchAccounts];
+    [self.accountTableView reloadData];
 }
 
-- (void)initializeFetchedResultsController {
-    
+- (void)fetchAccounts {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
- 
+    
     [request setPredicate:[NSPredicate predicateWithFormat:@"date == %@", self.passedDate]];  // 根据传来的date筛选需要的结果
     
-    NSSortDescriptor *date = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];  // 事实上同一界面account的date都是一样的，此处只是因为NSFetchRequeset必须要一个sort才加的
-    
-    [request setSortDescriptors:@[date]];
-    
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *moc = appDelegate.managedObjectContext;
-    
-    [self setFetchedResultsController:[[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil]];
-    
-    [[self fetchedResultsController] setDelegate:self];
-    
     NSError *error = nil;
-    if (![[self fetchedResultsController] performFetch:&error]) {
-        NSLog(@"Failed to initiialize FetchedResultsController: %@\n%@", [error localizedDescription], [error userInfo]);
-        abort();
-    }
-    //NSArray *hehe = [moc executeFetchRequest:request error:&error];
-    //NSLog(@"%@", [[self fetchedResultsController] objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]);
-    id object = [[self fetchedResultsController] fetchedObjects];
-    NSLog(@"hehe:%@", object);
+    self.fetchedResults = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:request error:&error]];
+    NSLog(@"%@", self.fetchedResults);
 }
 
 #pragma mark - UITableViewDataSource
 
 - (void)configureCell:(AZXAccountTableViewCell *)cell atIndexPath:(NSIndexPath*)indexPath {
-    AZXAccountMO *account = [[self fetchedResultsController] fetchedObjects][indexPath.row];
-    id object = [[self fetchedResultsController] fetchedObjects];
-    NSLog(@"object: %@ account: %@", object, account);
+    Account *account = [self.fetchedResults objectAtIndex:indexPath.row];
     cell.typeName.text = account.type;
     cell.money.text = account.money;
     //cell.typeImage.image = [UIImage imageNamed:cell.typeName.text]; !!!!!!!!!!!!
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"cellForRowAtIndexPath");
+    
     AZXAccountTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"accountCell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSLog(@"numberOfSectionsInTableView: %lu", [[[self fetchedResultsController] sections] count]);
-    return [[[self fetchedResultsController] sections] count];
+    return 1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    id< NSFetchedResultsSectionInfo> sectionInfo = [[self fetchedResultsController] sections][section];
-    NSLog(@"numberOfRowsInSection: %lu", [sectionInfo numberOfObjects]);
-    return [sectionInfo numberOfObjects];
+    return self.fetchedResults.count;
 }
-
-#pragma mark - NSFetchedResultsControllerDelegate
-
--(void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    [[self accountTableView] beginUpdates];
-}
-
--(void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-    NSLog(@"type:%lu", (unsigned long)type);
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [[self accountTableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-        case NSFetchedResultsChangeDelete:
-            [[self accountTableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-        case NSFetchedResultsChangeUpdate:
-            [self configureCell:[[self accountTableView] cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-            break;
-        case NSFetchedResultsChangeMove:
-            [[self accountTableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [[self accountTableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
-}
-
--(void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [[self accountTableView] endUpdates];
-}
-
 
 #pragma mark - PassingDateDelegate
 

@@ -7,7 +7,7 @@
 //
 
 #import "AZXNewAccountTableViewController.h"
-#import "AZXAccountMO.h"
+#import "Account.h"
 #import "AppDelegate.h"
 #import "AZXAccountViewController.h"
 
@@ -79,7 +79,7 @@
 #pragma mark - customize left button
 
 - (void)customizeLeftButton {
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonPressed:)];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:@"<保存" style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonPressed:)];
     
     self.navigationItem.leftBarButtonItem = leftItem;
 }
@@ -103,15 +103,17 @@
         // 若是必填项都已填好，则将属性保存在CoreData中
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Account" inManagedObjectContext:[appDelegate managedObjectContext]];
+        //NSEntityDescription *entity = [NSEntityDescription entityForName:@"Account" inManagedObjectContext:[appDelegate managedObjectContext]];
         
-        AZXAccountMO *account = [[AZXAccountMO alloc] initWithEntity:entity insertIntoManagedObjectContext:[appDelegate managedObjectContext]];
+        //Account *account = [[Account alloc] initWithEntity:entity insertIntoManagedObjectContext:[appDelegate managedObjectContext]];
 
-        [account insertNewObjectWithType:self.typeLabel.text
-                                  Detail:self.detailTextView.text
-                                   Money:self.moneyTextField.text
-                                    Date:self.dateLabel.text
-                           AndIncomeType:self.incomeType];
+        Account *account = [NSEntityDescription insertNewObjectForEntityForName:@"Account" inManagedObjectContext:appDelegate.managedObjectContext];
+        
+        account.type = self.typeLabel.text;
+        account.detail = self.detailTextView.text;
+        account.money = self.moneyTextField.text;
+        account.incomeType = self.incomeType;
+        account.date = self.dateLabel.text;
         
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
@@ -369,11 +371,13 @@
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if (component == 0) {
-        // 选择不同种类时改变incomeType值，以使得dataSource方法中得以判断右边需要多少行
+        // 选择不同种类时改变incomeType值，以使得dataSource方法中得以判断右边需要多少行,并改变moneyTextField的字体颜色
         if (row == 0) {
             self.incomeType = @"expense";
+            self.moneyTextField.tintColor = [UIColor redColor];
         } else {
             self.incomeType = @"income";
+            self.moneyTextField.tintColor = [UIColor greenColor];
         }
         [self.pickerView reloadComponent:1];
     } else {
