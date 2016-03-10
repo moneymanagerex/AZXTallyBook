@@ -72,7 +72,14 @@
     Account *account = [self.fetchedResults objectAtIndex:indexPath.row];
     cell.typeName.text = account.type;
     cell.money.text = account.money;
-    //cell.typeImage.image = [UIImage imageNamed:cell.typeName.text]; !!!!!!!!!!!!
+    cell.typeImage.image = [UIImage imageNamed:cell.typeName.text];
+    
+    // 根据类型选择不同颜色
+    if ([account.incomeType isEqualToString:@"income"]) {
+        cell.money.textColor = [UIColor blueColor];
+    } else {
+        cell.money.textColor = [UIColor redColor];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

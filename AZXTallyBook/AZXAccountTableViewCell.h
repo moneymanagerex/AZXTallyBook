@@ -14,5 +14,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *typeName;
 @property (weak, nonatomic) IBOutlet UILabel *money;
 
-
 @end

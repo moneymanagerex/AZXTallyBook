@@ -51,8 +51,11 @@
     dateFormatter.dateFormat = @"yyyy-MM-dd";
     self.dateLabel.text = [dateFormatter stringFromDate:[NSDate date]];
     
-    // 自定义返回按钮
+    // 自定义返回按钮(左侧)
     [self customizeLeftButton];
+    
+    // 自定义取消按钮(右侧)
+    [self customizeRightButton];
     
     //利用textView的delegate实现其placeholder
     self.detailTextView.delegate = self;
@@ -76,7 +79,7 @@
     
 }
 
-#pragma mark - customize left button
+#pragma mark - customize left and right button
 
 - (void)customizeLeftButton {
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:@"<保存" style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonPressed:)];
@@ -85,7 +88,7 @@
 }
 
 - (void)backBarButtonPressed:(UIButton *)sender {
-    if ([self.typeLabel.text isEqualToString:@"type"] || [self.moneyTextField.text  isEqualToString:@"0"]) {
+    if ([self.typeLabel.text isEqualToString:@"点击输入"] || [self.moneyTextField.text isEqualToString:@""]) {
         // type和money都是必填的，如果有一个没填，则弹出AlertController提示
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"金钱数额和类型都是必填的" preferredStyle:UIAlertControllerStyleAlert];
         
@@ -118,6 +121,28 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
+
+
+// 自定义右侧取消按钮
+- (void)customizeRightButton {
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelBarButtonPressed:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
+}
+
+- (void)cancelBarButtonPressed:(UIButton *)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"确定取消？这笔账单将不会被保存" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        // 直接返回主界面并且不保存account
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"不，留在页面" style:UIAlertActionStyleCancel handler:nil];
+    
+    [alert addAction:cancelAction];
+    [alert addAction:okAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 
 #pragma mark - Table view data source
 
@@ -210,8 +235,8 @@
     
     if (self.incomeArray.count == 0 || self.expenseArray.count == 0) {
         //若第一次进入应用，则为其设置默认的收入支出种类
-        self.incomeArray = [NSMutableArray arrayWithArray:@[@"工资薪酬", @"奖金福利", @"生意经营", @"金融投资", @"彩票中奖", @"银行利息", @"其他收入"]];
-        self.expenseArray = [NSMutableArray arrayWithArray:@[@"日常餐饮", @"外出聚餐", @"交通路费", @"日常用品", @"服装首饰", @"学习教育", @"烟酒消费", @"房租水电", @"运动健身", @"电子产品", @"化妆用品", @"医疗体检", @"外出旅游", @"其他消费"]];
+        self.incomeArray = [NSMutableArray arrayWithArray:@[@"工资薪酬", @"奖金福利", @"生意经营", @"投资理财", @"彩票中奖", @"银行利息", @"其他收入"]];
+        self.expenseArray = [NSMutableArray arrayWithArray:@[@"餐饮食品", @"交通路费", @"日常用品", @"服装首饰", @"学习教育", @"烟酒消费", @"房租水电", @"网上购物", @"运动健身", @"电子产品", @"化妆护理", @"医疗体检", @"游戏娱乐", @"外出旅游", @"油费维护", @"慈善捐赠", @"其他支出"]];
         
         // 保存至userDefaults中
         [self.userDefaults setObject:self.incomeArray forKey:@"income"];
@@ -254,6 +279,9 @@
 
     //恢复左边的保存按钮
     [self.navigationItem.leftBarButtonItem setTitle:@"保存"];
+    
+    //恢复右边的取消按钮
+    [self customizeRightButton];
 }
 
 #pragma mark - detail text View delegate methods
@@ -377,7 +405,7 @@
             self.moneyTextField.textColor = [UIColor redColor];
         } else {
             self.incomeType = @"income";
-            self.moneyTextField.textColor = [UIColor greenColor];
+            self.moneyTextField.textColor = [UIColor blueColor];
         }
         [self.pickerView reloadComponent:1];
     } else {

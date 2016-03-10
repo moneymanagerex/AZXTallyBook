@@ -12,7 +12,6 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    self.typeImage.image = [UIImage imageNamed:self.typeName.text]; // 图片采用名称为typeName的本地图片
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
