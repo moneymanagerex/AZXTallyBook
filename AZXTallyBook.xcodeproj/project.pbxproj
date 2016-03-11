@@ -18,6 +18,9 @@
 		7F057DE61C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F057DE11C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m */; };
 		7F057DE81C8D6B8E003DA3C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */; };
 		7F057DED1C8DA504003DA3C7 /* AZXAccountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F057DEC1C8DA504003DA3C7 /* AZXAccountTableViewCell.m */; };
+		7F077CF11C926DCC00D85707 /* AZXAllHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077CF01C926DCC00D85707 /* AZXAllHistoryViewController.m */; };
+		7F077CF61C926E9300D85707 /* AZXAllHistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077CF51C926E9300D85707 /* AZXAllHistoryTableViewCell.m */; };
+		7F077CFA1C92B0D400D85707 /* AZXMonthHIstoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */; };
 		7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */; };
 		7FF2307D1C8FC4200065F312 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF2307B1C8FC4200065F312 /* Account.m */; };
 /* End PBXBuildFile section */
@@ -61,6 +64,12 @@
 		7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		7F057DEB1C8DA504003DA3C7 /* AZXAccountTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXAccountTableViewCell.h; sourceTree = "<group>"; };
 		7F057DEC1C8DA504003DA3C7 /* AZXAccountTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAccountTableViewCell.m; sourceTree = "<group>"; };
+		7F077CEF1C926DCC00D85707 /* AZXAllHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXAllHistoryViewController.h; sourceTree = "<group>"; };
+		7F077CF01C926DCC00D85707 /* AZXAllHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAllHistoryViewController.m; sourceTree = "<group>"; };
+		7F077CF41C926E9300D85707 /* AZXAllHistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXAllHistoryTableViewCell.h; sourceTree = "<group>"; };
+		7F077CF51C926E9300D85707 /* AZXAllHistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAllHistoryTableViewCell.m; sourceTree = "<group>"; };
+		7F077CF81C92B0D400D85707 /* AZXMonthHIstoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXMonthHIstoryViewController.h; sourceTree = "<group>"; };
+		7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXMonthHIstoryViewController.m; sourceTree = "<group>"; };
 		7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account+CoreDataProperties.h"; sourceTree = "<group>"; };
 		7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Account+CoreDataProperties.m"; sourceTree = "<group>"; };
 		7FF2307A1C8FC4200065F312 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
@@ -115,12 +124,11 @@
 		7F057DA71C8D6B28003DA3C7 /* AZXTallyBook */ = {
 			isa = PBXGroup;
 			children = (
-				7F057DAB1C8D6B28003DA3C7 /* AppDelegate.h */,
-				7F057DAC1C8D6B28003DA3C7 /* AppDelegate.m */,
-				7F057DE91C8D6C5B003DA3C7 /* 账单首页 */,
-				7F057DEA1C8D6C7A003DA3C7 /* 新建账单 */,
-				7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */,
+				7F077CE91C926CC000D85707 /* CoreData */,
+				7F057DE91C8D6C5B003DA3C7 /* 记账 */,
+				7F077CED1C926D4B00D85707 /* 账本 */,
 				7F057DB71C8D6B28003DA3C7 /* Assets.xcassets */,
+				7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */,
 				7F057DB91C8D6B28003DA3C7 /* LaunchScreen.storyboard */,
 				7F057DBC1C8D6B28003DA3C7 /* Info.plist */,
 				7F057DB41C8D6B28003DA3C7 /* AZXTallyBook.xcdatamodeld */,
@@ -155,22 +163,19 @@
 			path = AZXTallyBookUITests;
 			sourceTree = "<group>";
 		};
-		7F057DE91C8D6C5B003DA3C7 /* 账单首页 */ = {
+		7F057DE91C8D6C5B003DA3C7 /* 记账 */ = {
 			isa = PBXGroup;
 			children = (
-				7F057DDE1C8D6B8E003DA3C7 /* AZXAccountViewController.h */,
-				7F057DDF1C8D6B8E003DA3C7 /* AZXAccountViewController.m */,
-				7F057DEE1C8DA50C003DA3C7 /* tableViewCell */,
+				7F077CF21C926E3100D85707 /* 记账首页 */,
+				7F057DEA1C8D6C7A003DA3C7 /* 新建账单 */,
 			);
-			name = "账单首页";
+			name = "记账";
 			sourceTree = "<group>";
 		};
 		7F057DEA1C8D6C7A003DA3C7 /* 新建账单 */ = {
 			isa = PBXGroup;
 			children = (
-				7F057DE01C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.h */,
-				7F057DE11C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m */,
-				7FF230341C8E75960065F312 /* managedObject */,
+				7F077CE81C926C9A00D85707 /* Controller */,
 			);
 			name = "新建账单";
 			sourceTree = "<group>";
@@ -182,6 +187,88 @@
 				7F057DEC1C8DA504003DA3C7 /* AZXAccountTableViewCell.m */,
 			);
 			name = tableViewCell;
+			sourceTree = "<group>";
+		};
+		7F077CE71C926C7200D85707 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7F057DDE1C8D6B8E003DA3C7 /* AZXAccountViewController.h */,
+				7F057DDF1C8D6B8E003DA3C7 /* AZXAccountViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		7F077CE81C926C9A00D85707 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7F057DE01C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.h */,
+				7F057DE11C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		7F077CE91C926CC000D85707 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				7F057DAB1C8D6B28003DA3C7 /* AppDelegate.h */,
+				7F057DAC1C8D6B28003DA3C7 /* AppDelegate.m */,
+				7FF230341C8E75960065F312 /* managedObject */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
+		7F077CED1C926D4B00D85707 /* 账本 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077CF31C926E5200D85707 /* 全部记录 */,
+				7F077CFB1C92B0DD00D85707 /* 每月记录 */,
+			);
+			name = "账本";
+			sourceTree = "<group>";
+		};
+		7F077CEE1C926D5900D85707 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7F077CEF1C926DCC00D85707 /* AZXAllHistoryViewController.h */,
+				7F077CF01C926DCC00D85707 /* AZXAllHistoryViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		7F077CF21C926E3100D85707 /* 记账首页 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077CE71C926C7200D85707 /* Controller */,
+				7F057DEE1C8DA50C003DA3C7 /* tableViewCell */,
+			);
+			name = "记账首页";
+			sourceTree = "<group>";
+		};
+		7F077CF31C926E5200D85707 /* 全部记录 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077CEE1C926D5900D85707 /* Controller */,
+				7F077CF71C926FDB00D85707 /* tableViewCell */,
+			);
+			name = "全部记录";
+			sourceTree = "<group>";
+		};
+		7F077CF71C926FDB00D85707 /* tableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				7F077CF41C926E9300D85707 /* AZXAllHistoryTableViewCell.h */,
+				7F077CF51C926E9300D85707 /* AZXAllHistoryTableViewCell.m */,
+			);
+			name = tableViewCell;
+			sourceTree = "<group>";
+		};
+		7F077CFB1C92B0DD00D85707 /* 每月记录 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077CF81C92B0D400D85707 /* AZXMonthHIstoryViewController.h */,
+				7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */,
+			);
+			name = "每月记录";
 			sourceTree = "<group>";
 		};
 		7FF230341C8E75960065F312 /* managedObject */ = {
@@ -329,8 +416,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FF2307D1C8FC4200065F312 /* Account.m in Sources */,
+				7F077CFA1C92B0D400D85707 /* AZXMonthHIstoryViewController.m in Sources */,
 				7F057DED1C8DA504003DA3C7 /* AZXAccountTableViewCell.m in Sources */,
+				7F077CF11C926DCC00D85707 /* AZXAllHistoryViewController.m in Sources */,
 				7F057DE51C8D6B8E003DA3C7 /* AZXAccountViewController.m in Sources */,
+				7F077CF61C926E9300D85707 /* AZXAllHistoryTableViewCell.m in Sources */,
 				7F057DB61C8D6B28003DA3C7 /* AZXTallyBook.xcdatamodeld in Sources */,
 				7F057DAD1C8D6B28003DA3C7 /* AppDelegate.m in Sources */,
 				7F057DAA1C8D6B28003DA3C7 /* main.m in Sources */,

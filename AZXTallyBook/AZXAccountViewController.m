@@ -46,7 +46,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.passedDate) { // 将控制器的标题设为当前日期
+    if (self.passedDate) { // 将控制器的标题设为该新账本所在的日期
         self.title = self.passedDate;
     } else {
         // 刚打开应用时，将passedDate设为当前日期(为了在fetchAccount时能筛选并展示当天的账单)
@@ -57,6 +57,10 @@
     
     [self fetchAccounts];
     [self.accountTableView reloadData];
+    
+    // 计算结余总额
+    [self calculateMoneySumAndSetText];
+    
 }
 
 - (void)fetchAccounts {
@@ -66,6 +70,33 @@
     
     NSError *error = nil;
     self.fetchedResults = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:request error:&error]];
+}
+
+- (void)calculateMoneySumAndSetText {
+    // 计算结余总金额
+    NSInteger moneySum = 0;
+    for (Account *account in self.fetchedResults) {
+        if ([account.incomeType isEqualToString:@"income"]) {
+            moneySum += [account.money integerValue];
+        } else {
+            moneySum -= [account.money integerValue];
+        }
+    }
+    
+    NSString *moneySumString = [NSString stringWithFormat:@"今日结余: %ld", (long)moneySum];
+    
+    NSMutableAttributedString *mutString = [[NSMutableAttributedString alloc] initWithString:moneySumString];
+    
+    // 在moneySumLabel上前面字体黑色，后半段根据正负决定颜色
+    [mutString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 5)];
+    
+    if (moneySum >= 0) {
+        [mutString addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(5, moneySumString.length - 5)];
+    } else {
+        [mutString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5, moneySumString.length - 5)];
+    }
+    
+    [self.moneySumLabel setAttributedText:mutString];
 }
 
 #pragma mark - UITableViewDataSource
