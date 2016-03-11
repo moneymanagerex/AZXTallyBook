@@ -222,6 +222,7 @@
 			children = (
 				7F077CF31C926E5200D85707 /* 全部记录 */,
 				7F077CFB1C92B0DD00D85707 /* 每月记录 */,
+				7F077CF71C926FDB00D85707 /* tableViewCell */,
 			);
 			name = "账本";
 			sourceTree = "<group>";
@@ -248,7 +249,6 @@
 			isa = PBXGroup;
 			children = (
 				7F077CEE1C926D5900D85707 /* Controller */,
-				7F077CF71C926FDB00D85707 /* tableViewCell */,
 			);
 			name = "全部记录";
 			sourceTree = "<group>";
@@ -265,10 +265,18 @@
 		7F077CFB1C92B0DD00D85707 /* 每月记录 */ = {
 			isa = PBXGroup;
 			children = (
+				7F077D001C92C97C00D85707 /* Controller */,
+			);
+			name = "每月记录";
+			sourceTree = "<group>";
+		};
+		7F077D001C92C97C00D85707 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
 				7F077CF81C92B0D400D85707 /* AZXMonthHIstoryViewController.h */,
 				7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */,
 			);
-			name = "每月记录";
+			name = Controller;
 			sourceTree = "<group>";
 		};
 		7FF230341C8E75960065F312 /* managedObject */ = {

@@ -42,6 +42,13 @@
 
 #pragma mark - view did load
 
+- (BOOL)isSegueFromTableView {
+    if (!_isSegueFromTableView) {
+        _isSegueFromTableView = NO; // 默认为NO
+    }
+    return _isSegueFromTableView;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -150,7 +157,9 @@
             }
         }
         
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        // 跳转到前一界面
+        NSInteger index = [self.navigationController.viewControllers indexOfObject:self];
+        [self.navigationController popToViewController:self.navigationController.viewControllers[index-1] animated:YES];
     }
 }
 

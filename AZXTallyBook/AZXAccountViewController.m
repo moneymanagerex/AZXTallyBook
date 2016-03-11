@@ -19,9 +19,9 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *moneySumLabel; // 结余总金额
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (weak, nonatomic) IBOutlet UIButton *addNewButton;
 
-@property (nonatomic, strong) NSString *passedDate; // 从新建账单处传来的date值，用做Predicate筛选Fetch的ManagedObject
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
@@ -30,6 +30,12 @@
 @end
 
 @implementation AZXAccountViewController
+- (BOOL)isSegueFromHistory {
+    if (!_isSegueFromHistory) {
+        _isSegueFromHistory = NO; // 默认为NO
+    }
+    return _isSegueFromHistory;
+}
 
 // navigation控制时从下一界面返回时不会再次调用viewDidLoad，应用viewWillAppear
 - (void)viewDidLoad {
@@ -41,6 +47,11 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = appDelegate.managedObjectContext;
     
+    if (self.isSegueFromHistory) {
+        //self.accountTableView.frame.size.height += self.addNewButton.frame.size.height;
+        [self.addNewButton removeFromSuperview];
+
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -146,6 +157,8 @@
         [self.fetchedResults removeObjectAtIndex:indexPath.row];
         // 删除tableView的行
         [self.accountTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        // 最后更新UI
+        [self calculateMoneySumAndSetText];
     }
 }
 

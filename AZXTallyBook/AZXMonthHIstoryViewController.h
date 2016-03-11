@@ -10,4 +10,6 @@
 
 @interface AZXMonthHIstoryViewController : UIViewController
 
+@property (nonatomic, strong) NSString *date; // 主界面点击cell的date
+
 @end

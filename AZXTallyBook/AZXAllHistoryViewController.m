@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "Account.h"
 #import "AZXAllHistoryTableViewCell.h"
+#import "AZXMonthHIstoryViewController.h"
 
 @interface AZXAllHistoryViewController () <UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UILabel *totalDetailLabel;
@@ -45,12 +46,15 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = appDelegate.managedObjectContext;
     
-    NSLog(@"viewDidLoad");
-    
     // 数组的初始化
     self.monthIncome = [NSMutableArray array];
     self.monthExpense = [NSMutableArray array];
+    
+}
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     [self fetchData];
     
     [self filterUniqueDate];
@@ -60,13 +64,6 @@
     [self setTotalLabel];
     
     [self.monthTableView reloadData];
-
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
-    
 }
 
 - (void)fetchData {
@@ -96,6 +93,12 @@
 }
 
 - (void)calculateMonthsMoney {
+    // 先将数据取得添加到暂时数组中，防止每次调用这方法在没有数据改变的情况下金额显示增大
+    NSInteger tmpTotalIncome = 0;
+    NSInteger tmpTotalExpense = 0;
+    NSMutableArray *tmpMonthIncome = [NSMutableArray array];
+    NSMutableArray *tmpMonthExpense = [NSMutableArray array];
+    
     
     for (NSInteger i = 0; i < self.uniqueDateArray.count; i++) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
@@ -106,7 +109,6 @@
         NSError *error = nil;
         NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
         
-        NSLog(@"results:%@", results);
         NSInteger income = 0;
         NSInteger expense = 0;
         for (Account *account in results) {
@@ -117,17 +119,25 @@
             }
         }
         
-        // 加到总收入支出中
-        self.totalIncome += income;
-        self.totalExpense += expense;
+        // 加到暂存总收入支出中
+        tmpTotalIncome += income;
+        tmpTotalExpense += expense;
         
-        // 并将结果储存在收入/支出数组相应月份在uniqueDateArray的位置
+        // 并将结果暂时储存在收入/支出数组相应月份在uniqueDateArray的位置
         // 方便到时候设置cell的各个属性
-        [self.monthIncome addObject:[NSString stringWithFormat:@"%ld", (long)income]];
-        [self.monthExpense addObject:[NSString stringWithFormat:@"%ld", (long)expense]];
+        [tmpMonthIncome addObject:[NSString stringWithFormat:@"%ld", (long)income]];
+        [tmpMonthExpense addObject:[NSString stringWithFormat:@"%ld", (long)expense]];
         
-        NSLog(@"monthIncome: %@", self.monthIncome);
     }
+    
+    
+    // 将暂存值赋给属性以显示在UI上
+    self.totalIncome = tmpTotalIncome;
+    self.totalExpense = tmpTotalExpense;
+    
+    self.monthIncome = tmpMonthIncome;
+    self.monthExpense = tmpMonthExpense;
+
 }
 
 - (void)setTotalLabel {
@@ -151,7 +161,7 @@
     // 计算结余
     NSInteger remainMoney = self.totalIncome - self.totalExpense;
     
-    self.remainMoneyLabel.text = [NSString stringWithFormat:@"总结余: %ld", (long)remainMoney];
+    self.remainMoneyLabel.text = [NSString stringWithFormat:@"结余: %ld", (long)remainMoney];
     
 }
 
@@ -208,14 +218,21 @@
     return mutString;
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"showMonthDetail"]) {
+        if ([[segue destinationViewController] isKindOfClass:[AZXMonthHIstoryViewController class]]) {
+            AZXMonthHIstoryViewController *viewController = [segue destinationViewController];
+            NSIndexPath *indexPath = [self.monthTableView indexPathForSelectedRow];
+            
+            // 将被点击cell的相应属性传过去
+            viewController.date = self.uniqueDateArray[indexPath.row];
+        }
+    }
 }
-*/
+
 
 @end
