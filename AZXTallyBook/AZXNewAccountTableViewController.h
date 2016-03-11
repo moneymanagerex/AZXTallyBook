@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Account.h"
 
 @class AZXNewAccountTableViewController;
 
@@ -20,4 +21,7 @@
 
 @property (nonatomic, weak) id<PassingDateDelegate> delegate;
 
+@property (nonatomic, assign) BOOL isSegueFromTableView; // 判断是否通过点击cell转来
+
+@property (nonatomic, strong) Account *accountInSelectedRow; // 点击的cell是第几个
 @end

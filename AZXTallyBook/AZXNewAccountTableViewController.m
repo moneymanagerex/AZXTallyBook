@@ -7,7 +7,6 @@
 //
 
 #import "AZXNewAccountTableViewController.h"
-#import "Account.h"
 #import "AppDelegate.h"
 #import "AZXAccountViewController.h"
 
@@ -46,27 +45,47 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //日期显示默认为当前日期
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy-MM-dd";
-    self.dateLabel.text = [dateFormatter stringFromDate:[NSDate date]];
-    
-    // 自定义返回按钮(左侧)
+    // 自定义"返回"按钮(左侧)
     [self customizeLeftButton];
     
-    // 自定义取消按钮(右侧)
+    // 自定义"取消"按钮(右侧)
     [self customizeRightButton];
     
-    //利用textView的delegate实现其placeholder
-    self.detailTextView.delegate = self;
-    self.detailTextView.text = @"详细描述(选填)";
-    self.detailTextView.textColor = [UIColor lightGrayColor];
-    
-    
-    //一进入界面即弹出弹出输入金额
-    [self.moneyTextField becomeFirstResponder];
-    self.moneyTextField.keyboardType = UIKeyboardTypeDecimalPad;
-    self.moneyTextField.delegate = self;
+    // 判断是怎样转到这个界面的
+    if (self.isSegueFromTableView) {
+        // 如果是点击tableView而来，显示传递过来的各个属性
+        self.moneyTextField.text = self.accountInSelectedRow.money;
+        self.dateLabel.text = self.accountInSelectedRow.date;
+        self.detailTextView.text = self.accountInSelectedRow.detail;
+        self.incomeType = self.accountInSelectedRow.incomeType;
+        self.typeLabel.text = self.accountInSelectedRow.type;
+        
+        if ([self.incomeType isEqualToString:@"income"]) {
+            self.moneyTextField.textColor = [UIColor blueColor];
+        } else {
+            self.moneyTextField.textColor = [UIColor redColor];
+        }
+
+        
+    } else {
+        // 如果是点击记账按钮而来
+        //日期显示默认为当前日期
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy-MM-dd";
+        self.dateLabel.text = [dateFormatter stringFromDate:[NSDate date]];
+        
+        //利用textView的delegate实现其placeholder
+        self.detailTextView.delegate = self;
+        self.detailTextView.text = @"详细描述(选填)";
+        self.detailTextView.textColor = [UIColor lightGrayColor];
+        
+        
+        //一进入界面即弹出键盘输入金额
+        [self.moneyTextField becomeFirstResponder];
+        self.moneyTextField.keyboardType = UIKeyboardTypeDecimalPad;
+        self.moneyTextField.delegate = self;
+
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -103,20 +122,33 @@
         [self presentViewController:alertController animated:YES completion:nil];
         
     } else {
-        // 若是必填项都已填好，则将属性保存在CoreData中
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        
-        //NSEntityDescription *entity = [NSEntityDescription entityForName:@"Account" inManagedObjectContext:[appDelegate managedObjectContext]];
-        
-        //Account *account = [[Account alloc] initWithEntity:entity insertIntoManagedObjectContext:[appDelegate managedObjectContext]];
-
-        Account *account = [NSEntityDescription insertNewObjectForEntityForName:@"Account" inManagedObjectContext:appDelegate.managedObjectContext];
-        
-        account.type = self.typeLabel.text;
-        account.detail = self.detailTextView.text;
-        account.money = self.moneyTextField.text;
-        account.incomeType = self.incomeType;
-        account.date = self.dateLabel.text;
+        if (self.isSegueFromTableView) {
+            // 若是从tableView传来的，则只需更新account就好
+            self.accountInSelectedRow.type = self.typeLabel.text;
+            self.accountInSelectedRow.detail = self.detailTextView.text;
+            self.accountInSelectedRow.money = self.moneyTextField.text;
+            self.accountInSelectedRow.incomeType = self.incomeType;
+            self.accountInSelectedRow.date = self.dateLabel.text;
+        } else {
+            // 若是必填项都已填好且要记新帐，则将属性保存在CoreData中
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            
+            Account *account = [NSEntityDescription insertNewObjectForEntityForName:@"Account" inManagedObjectContext:appDelegate.managedObjectContext];
+            
+            account.type = self.typeLabel.text;
+            account.money = self.moneyTextField.text;
+            account.incomeType = self.incomeType;
+            account.date = self.dateLabel.text;
+            
+            // 此处因为textView无法使用placeholder而将其文本默认为"详细描述(选填)"
+            // 故通过判断其是否被修改来决定储存的内容
+            if (![self.detailTextView.text isEqualToString:@"详细描述(选填)"]) {
+                account.detail = self.detailTextView.text;
+            } else {
+                // 当用户未编辑详细描述时，将account的detail设为空
+                account.detail = @"";
+            }
+        }
         
         [self.navigationController popToRootViewControllerAnimated:YES];
     }

@@ -30,7 +30,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="05f-q9-cCi" kind="show" identifier="segueToNewAcountView" id="Afg-Gh-UD5"/>
+                                    <segue destination="05f-q9-cCi" kind="show" identifier="addNewAccount" id="Afg-Gh-UD5"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WYM-nR-WD2">
@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eyW-nT-L55" id="tcj-7k-lfx">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wqa-wi-cyJ">
@@ -95,6 +95,7 @@
                                             <outlet property="money" destination="Igz-7d-lA4" id="ied-YT-cfS"/>
                                             <outlet property="typeImage" destination="wqa-wi-cyJ" id="sGl-MU-E5E"/>
                                             <outlet property="typeName" destination="lVb-Lv-nZ8" id="mds-U1-lII"/>
+                                            <segue destination="05f-q9-cCi" kind="show" identifier="segueToDetailView" id="0xh-El-43O"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -125,6 +126,7 @@
                     <navigationItem key="navigationItem" id="HE4-Xn-M3d"/>
                     <connections>
                         <outlet property="accountTableView" destination="WYM-nR-WD2" id="UzR-p2-qcs"/>
+                        <outlet property="moneySumLabel" destination="2LY-9x-R6i" id="VDM-RG-NfK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -326,4 +328,7 @@
             <point key="canvasLocation" x="280" y="306"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="0xh-El-43O"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -17,6 +17,8 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *accountTableView;
 
+@property (weak, nonatomic) IBOutlet UILabel *moneySumLabel; // 结余总金额
+
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @property (nonatomic, strong) NSString *passedDate; // 从新建账单处传来的date值，用做Predicate筛选Fetch的ManagedObject
@@ -82,24 +84,44 @@
     }
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     AZXAccountTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"accountCell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.fetchedResults.count;
 }
 
+
+#pragma mark - UITabelView Delegate
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // 首先删除CoreData里的数据
+        [self.managedObjectContext deleteObject:self.fetchedResults[indexPath.row]];
+        // 然后移除提供数据源的fetchResults(不然会出现tableView的update问题而crush)
+        [self.fetchedResults removeObjectAtIndex:indexPath.row];
+        // 删除tableView的行
+        [self.accountTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+
 #pragma mark - PassingDateDelegate
 
--(void)viewController:(AZXNewAccountTableViewController *)controller didPassDate:(NSString *)date {
+- (void)viewController:(AZXNewAccountTableViewController *)controller didPassDate:(NSString *)date {
     self.passedDate = date;  // 接收从AZXNewAccountTableViewController传来的date值，用做Predicate来筛选Fetch的ManagedObject
 }
 
@@ -110,6 +132,18 @@
     if ([[segue destinationViewController] isKindOfClass:[AZXNewAccountTableViewController class]]) {  // segue时将self设为AZXNewAccountTableViewController的代理
         AZXNewAccountTableViewController *viewController = [segue destinationViewController];
         viewController.delegate = self;
+    }
+    
+    if ([segue.identifier isEqualToString:@"addNewAccount"]) {
+        // 点击记账按钮时，创建一个新账本，并告知不是点击tableView转来
+        AZXNewAccountTableViewController *viewController = [segue destinationViewController];
+        viewController.isSegueFromTableView = NO;
+    } else if ([segue.identifier isEqualToString:@"segueToDetailView"]) {
+        // 点击已保存的账本记录，查看详细，并告知是点击tableView而来
+        // 转到详细页面时，要显示被点击cell的内容，所以要将account传过去，让其显示相应内容
+        AZXNewAccountTableViewController *viewController = [segue destinationViewController];
+        viewController.isSegueFromTableView = YES;
+        viewController.accountInSelectedRow = self.fetchedResults[self.accountTableView.indexPathForSelectedRow.row];
     }
 }
 
