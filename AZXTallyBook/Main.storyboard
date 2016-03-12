@@ -303,6 +303,7 @@
                     <connections>
                         <segue destination="PV3-Vu-0io" kind="relationship" relationship="viewControllers" id="mno-AC-q17"/>
                         <segue destination="Use-Oc-73q" kind="relationship" relationship="viewControllers" id="1Fh-h3-HVF"/>
+                        <segue destination="Rpk-Qw-FHE" kind="relationship" relationship="viewControllers" id="vR2-o9-QK3"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4oQ-6n-P6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -460,7 +461,7 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BPa-bG-SYn" id="7wg-xG-ba8">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03-12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bEV-N4-2Jz">
@@ -573,6 +574,84 @@
             </objects>
             <point key="canvasLocation" x="180" y="483"/>
         </scene>
+        <!--Pie View Controller-->
+        <scene sceneID="an2-Q9-CD2">
+            <objects>
+                <viewController id="zqN-MK-RhY" customClass="AZXPieViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="17U-cW-TfR"/>
+                        <viewControllerLayoutGuide type="bottom" id="631-qu-Eoh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="j5h-UE-gkG">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9ku-RW-1De" customClass="AZXPieView">
+                                <rect key="frame" x="20" y="72" width="560" height="292"/>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mCM-9z-2AI">
+                                <rect key="frame" x="20" y="401" width="560" height="150"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="LYf-LY-JAh"/>
+                                </constraints>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="xx月  总支出 xxxx" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aIn-gh-3De">
+                                <rect key="frame" x="20" y="372" width="560" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="tGQ-32-jvy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="aIn-gh-3De" firstAttribute="top" secondItem="9ku-RW-1De" secondAttribute="bottom" constant="8" symbolic="YES" id="HdO-af-ZB7"/>
+                            <constraint firstItem="mCM-9z-2AI" firstAttribute="trailing" secondItem="aIn-gh-3De" secondAttribute="trailing" id="OfT-mF-1zK"/>
+                            <constraint firstItem="aIn-gh-3De" firstAttribute="leading" secondItem="9ku-RW-1De" secondAttribute="leading" id="QbS-eE-O7D"/>
+                            <constraint firstItem="mCM-9z-2AI" firstAttribute="bottom" secondItem="631-qu-Eoh" secondAttribute="top" id="S5J-BK-7Tn"/>
+                            <constraint firstItem="mCM-9z-2AI" firstAttribute="top" secondItem="aIn-gh-3De" secondAttribute="bottom" constant="8" symbolic="YES" id="cc5-FV-dKr"/>
+                            <constraint firstItem="mCM-9z-2AI" firstAttribute="leading" secondItem="aIn-gh-3De" secondAttribute="leading" id="i65-9v-ilg"/>
+                            <constraint firstItem="9ku-RW-1De" firstAttribute="trailing" secondItem="aIn-gh-3De" secondAttribute="trailing" id="iCf-ml-vRm"/>
+                            <constraint firstItem="9ku-RW-1De" firstAttribute="leading" secondItem="j5h-UE-gkG" secondAttribute="leadingMargin" id="sDK-Xr-HCL"/>
+                            <constraint firstItem="9ku-RW-1De" firstAttribute="top" secondItem="17U-cW-TfR" secondAttribute="bottom" constant="8" symbolic="YES" id="vUF-or-0OQ"/>
+                            <constraint firstItem="9ku-RW-1De" firstAttribute="trailing" secondItem="j5h-UE-gkG" secondAttribute="trailingMargin" id="wwn-XK-Lqt"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Ca4-Bc-OVl" appends="YES" id="kRG-uc-Gyx"/>
+                            <outletCollection property="gestureRecognizers" destination="vpr-1j-Gmu" appends="YES" id="pqM-w5-TOj"/>
+                        </connections>
+                    </view>
+                    <navigationItem key="navigationItem" id="tSo-gh-I1r">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="7kp-TQ-zQl">
+                            <rect key="frame" x="201" y="7" width="198" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="支出"/>
+                                <segment title="收入"/>
+                            </segments>
+                            <connections>
+                                <action selector="segValueChanged:" destination="zqN-MK-RhY" eventType="valueChanged" id="5rj-ML-4kR"/>
+                            </connections>
+                        </segmentedControl>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="leftSwipe" destination="Ca4-Bc-OVl" id="Jaf-3S-pBC"/>
+                        <outlet property="pieView" destination="9ku-RW-1De" id="muZ-XD-ZW2"/>
+                        <outlet property="rightSwipe" destination="vpr-1j-Gmu" id="rXH-cu-GAj"/>
+                        <outlet property="typeTableView" destination="mCM-9z-2AI" id="KYV-hz-TW3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QxU-ic-Dzx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="Ca4-Bc-OVl" userLabel="Left Swipe Gesture Recognizer"/>
+                <swipeGestureRecognizer direction="right" id="vpr-1j-Gmu" userLabel="Right Swipe Gesture Recognizer"/>
+            </objects>
+            <point key="canvasLocation" x="945" y="1218"/>
+        </scene>
         <!--Account View Controller-->
         <scene sceneID="jbD-9j-xVL">
             <objects>
@@ -602,7 +681,7 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HjO-9h-G1b" id="5fA-SP-Vc9">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Y32-L6-rVc">
@@ -682,6 +761,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FGN-DE-U3y" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="975" y="-314"/>
+        </scene>
+        <!--统计-->
+        <scene sceneID="1CU-hH-Hxh">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rpk-Qw-FHE" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="统计" id="e7K-Rd-gfW"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="TZD-sF-cq4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="zqN-MK-RhY" kind="relationship" relationship="rootViewController" id="prC-hF-c1O"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bKE-KK-yxG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="180" y="1218"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

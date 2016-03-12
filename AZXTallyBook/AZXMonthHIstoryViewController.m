@@ -56,7 +56,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.title = self.date;
+    self.navigationItem.title = self.date;
     
     [self fetchData];
     

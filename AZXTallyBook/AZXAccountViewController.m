@@ -47,7 +47,7 @@
     [super viewWillAppear:animated];
     
     if (self.passedDate) { // 将控制器的标题设为该新账本所在的日期
-        self.title = self.passedDate;
+        self.navigationItem.title = self.passedDate;
     } else {
         // 刚打开应用时，将passedDate设为当前日期(为了在fetchAccount时能筛选并展示当天的账单)
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

@@ -21,6 +21,8 @@
 		7F077CF11C926DCC00D85707 /* AZXAllHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077CF01C926DCC00D85707 /* AZXAllHistoryViewController.m */; };
 		7F077CF61C926E9300D85707 /* AZXAllHistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077CF51C926E9300D85707 /* AZXAllHistoryTableViewCell.m */; };
 		7F077CFA1C92B0D400D85707 /* AZXMonthHIstoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */; };
+		7F077D031C93F67700D85707 /* AZXPieView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D021C93F67700D85707 /* AZXPieView.m */; };
+		7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D061C940B9700D85707 /* AZXPieViewController.m */; };
 		7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */; };
 		7FF2307D1C8FC4200065F312 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF2307B1C8FC4200065F312 /* Account.m */; };
 /* End PBXBuildFile section */
@@ -70,6 +72,10 @@
 		7F077CF51C926E9300D85707 /* AZXAllHistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAllHistoryTableViewCell.m; sourceTree = "<group>"; };
 		7F077CF81C92B0D400D85707 /* AZXMonthHIstoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXMonthHIstoryViewController.h; sourceTree = "<group>"; };
 		7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXMonthHIstoryViewController.m; sourceTree = "<group>"; };
+		7F077D011C93F67700D85707 /* AZXPieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXPieView.h; sourceTree = "<group>"; };
+		7F077D021C93F67700D85707 /* AZXPieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieView.m; sourceTree = "<group>"; };
+		7F077D051C940B9700D85707 /* AZXPieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXPieViewController.h; sourceTree = "<group>"; };
+		7F077D061C940B9700D85707 /* AZXPieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieViewController.m; sourceTree = "<group>"; };
 		7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account+CoreDataProperties.h"; sourceTree = "<group>"; };
 		7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Account+CoreDataProperties.m"; sourceTree = "<group>"; };
 		7FF2307A1C8FC4200065F312 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
@@ -127,6 +133,7 @@
 				7F077CE91C926CC000D85707 /* CoreData */,
 				7F057DE91C8D6C5B003DA3C7 /* 记账 */,
 				7F077CED1C926D4B00D85707 /* 账本 */,
+				7F077D041C93F68E00D85707 /* 饼状图 */,
 				7F057DB71C8D6B28003DA3C7 /* Assets.xcassets */,
 				7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */,
 				7F057DB91C8D6B28003DA3C7 /* LaunchScreen.storyboard */,
@@ -277,6 +284,33 @@
 				7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		7F077D041C93F68E00D85707 /* 饼状图 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D081C940B9C00D85707 /* Controller */,
+				7F077D091C940BA700D85707 /* PieView */,
+			);
+			name = "饼状图";
+			sourceTree = "<group>";
+		};
+		7F077D081C940B9C00D85707 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D051C940B9700D85707 /* AZXPieViewController.h */,
+				7F077D061C940B9700D85707 /* AZXPieViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		7F077D091C940BA700D85707 /* PieView */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D011C93F67700D85707 /* AZXPieView.h */,
+				7F077D021C93F67700D85707 /* AZXPieView.m */,
+			);
+			name = PieView;
 			sourceTree = "<group>";
 		};
 		7FF230341C8E75960065F312 /* managedObject */ = {
@@ -434,6 +468,8 @@
 				7F057DAA1C8D6B28003DA3C7 /* main.m in Sources */,
 				7F057DE61C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m in Sources */,
 				7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */,
+				7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */,
+				7F077D031C93F67700D85707 /* AZXPieView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
