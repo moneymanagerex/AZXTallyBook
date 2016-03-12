@@ -30,12 +30,6 @@
 @end
 
 @implementation AZXAccountViewController
-- (BOOL)isSegueFromHistory {
-    if (!_isSegueFromHistory) {
-        _isSegueFromHistory = NO; // 默认为NO
-    }
-    return _isSegueFromHistory;
-}
 
 // navigation控制时从下一界面返回时不会再次调用viewDidLoad，应用viewWillAppear
 - (void)viewDidLoad {
@@ -47,11 +41,6 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = appDelegate.managedObjectContext;
     
-    if (self.isSegueFromHistory) {
-        //self.accountTableView.frame.size.height += self.addNewButton.frame.size.height;
-        [self.addNewButton removeFromSuperview];
-
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {

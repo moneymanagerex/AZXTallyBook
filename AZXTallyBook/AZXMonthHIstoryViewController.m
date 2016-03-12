@@ -227,7 +227,6 @@
             
             // 通知AZXAccountViewController是从此页面转过去的，且告诉其日期
             viewController.passedDate = self.uniqueDateArray[indexPath.row];
-            viewController.isSegueFromHistory = YES;
         }
     }
 }

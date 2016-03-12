@@ -6,11 +6,11 @@
 //  Copyright © 2016年 azx. All rights reserved.
 //
 
+// 这个Controller
+
 #import <UIKit/UIKit.h>
 
 @interface AZXAccountViewController : UIViewController
 
 @property (nonatomic, strong) NSString *passedDate; // 从别处传来的date值，用做Predicate筛选Fetch的ManagedObject
-
-@property (nonatomic, assign) BOOL isSegueFromHistory;
 @end
