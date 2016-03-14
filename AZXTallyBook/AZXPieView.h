@@ -8,6 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
+@class AZXPieView;
+
+@protocol AZXPieViewDataSource <NSObject>
+
+@required
+
+- (NSArray *)percentsForPieView:(AZXPieView *)pieView;
+- (NSArray *)typesForPieView:(AZXPieView *)pieView;
+- (NSArray *)colorsForPieView:(AZXPieView *)pieView;
+
+@end
+
 @interface AZXPieView : UIView
+
+@property (weak, nonatomic) id<AZXPieViewDataSource> dataSource;
+
+- (void)reloadData;
+
+- (void)removeAllLabel;
 
 @end

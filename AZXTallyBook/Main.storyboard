@@ -595,6 +595,53 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="LYf-LY-JAh"/>
                                 </constraints>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="pieTypeCell" id="VUn-03-LXP" customClass="AZXPieTableViewCell">
+                                        <rect key="frame" x="0.0" y="28" width="560" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VUn-03-LXP" id="xld-ar-Whw">
+                                            <rect key="frame" x="0.0" y="0.0" width="560" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kU9-3t-QIX">
+                                                    <rect key="frame" x="8" y="8" width="29" height="29"/>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SEI-9O-vcz">
+                                                    <rect key="frame" x="541" y="8" width="11" height="29"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qfp-3i-5WY">
+                                                    <rect key="frame" x="45" y="8" width="488" height="29"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="488" id="IOL-tv-YsF"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="SEI-9O-vcz" firstAttribute="baseline" secondItem="qfp-3i-5WY" secondAttribute="baseline" id="4UO-c8-UUt"/>
+                                                <constraint firstItem="kU9-3t-QIX" firstAttribute="leading" secondItem="xld-ar-Whw" secondAttribute="leadingMargin" id="LUn-ak-9RB"/>
+                                                <constraint firstItem="kU9-3t-QIX" firstAttribute="centerY" secondItem="xld-ar-Whw" secondAttribute="centerY" id="QDm-Xl-Wqn"/>
+                                                <constraint firstItem="qfp-3i-5WY" firstAttribute="leading" secondItem="kU9-3t-QIX" secondAttribute="trailing" constant="8" symbolic="YES" id="cXd-NM-N4m"/>
+                                                <constraint firstItem="kU9-3t-QIX" firstAttribute="top" secondItem="xld-ar-Whw" secondAttribute="topMargin" id="dnv-tE-evh"/>
+                                                <constraint firstItem="qfp-3i-5WY" firstAttribute="top" secondItem="kU9-3t-QIX" secondAttribute="top" id="gTA-bM-qoS"/>
+                                                <constraint firstItem="SEI-9O-vcz" firstAttribute="trailing" secondItem="xld-ar-Whw" secondAttribute="trailingMargin" id="o3C-Xz-7o7"/>
+                                                <constraint firstItem="qfp-3i-5WY" firstAttribute="firstBaseline" secondItem="SEI-9O-vcz" secondAttribute="firstBaseline" id="oyR-mD-dUL"/>
+                                                <constraint firstItem="SEI-9O-vcz" firstAttribute="leading" secondItem="qfp-3i-5WY" secondAttribute="trailing" constant="8" symbolic="YES" id="tUp-mV-ssj"/>
+                                                <constraint firstItem="qfp-3i-5WY" firstAttribute="bottom" secondItem="kU9-3t-QIX" secondAttribute="bottom" id="xKp-SJ-x2k"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="colorView" destination="kU9-3t-QIX" id="5ft-Gn-BiQ"/>
+                                            <outlet property="moneyLabel" destination="qfp-3i-5WY" id="7RT-0O-E9w"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="xx月  总支出 xxxx" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aIn-gh-3De">
                                 <rect key="frame" x="20" y="372" width="560" height="21"/>
@@ -641,6 +688,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="leftSwipe" destination="Ca4-Bc-OVl" id="Jaf-3S-pBC"/>
+                        <outlet property="moneyLabel" destination="aIn-gh-3De" id="pNm-V2-j8C"/>
                         <outlet property="pieView" destination="9ku-RW-1De" id="muZ-XD-ZW2"/>
                         <outlet property="rightSwipe" destination="vpr-1j-Gmu" id="rXH-cu-GAj"/>
                         <outlet property="typeTableView" destination="mCM-9z-2AI" id="KYV-hz-TW3"/>

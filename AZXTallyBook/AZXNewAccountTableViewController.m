@@ -116,24 +116,16 @@
 - (void)backBarButtonPressed:(UIButton *)sender {
     if ([self.typeLabel.text isEqualToString:@"点击输入"] || [self.moneyTextField.text isEqualToString:@""]) {
         // type和money都是必填的，如果有一个没填，则弹出AlertController提示
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"金钱数额和类型都是必填的" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}];
-        
-        [alertController addAction:action];
-        
-        // 弹出alertController之前先将所有的键盘收回，否则会导致之后键盘不响应
-        [self.moneyTextField resignFirstResponder];
-        [self.detailTextView resignFirstResponder];
-        
-        [self presentViewController:alertController animated:YES completion:nil];
-        
+        [self presentAlertControllerWithMessage:@"金钱数额和类型都是必填的"];
+    } else if ([self.moneyTextField.text componentsSeparatedByString:@"."].count > 2) {
+        // 输入超过两个小数点
+        [self presentAlertControllerWithMessage:@"输入金额不格式不符"];
     } else {
         if (self.isSegueFromTableView) {
             // 若是从tableView传来的，则只需更新account就好
             self.accountInSelectedRow.type = self.typeLabel.text;
             self.accountInSelectedRow.detail = self.detailTextView.text;
-            self.accountInSelectedRow.money = self.moneyTextField.text;
+            [self setMoneyToAccount:self.accountInSelectedRow];
             self.accountInSelectedRow.incomeType = self.incomeType;
             self.accountInSelectedRow.date = self.dateLabel.text;
         } else {
@@ -143,7 +135,8 @@
             Account *account = [NSEntityDescription insertNewObjectForEntityForName:@"Account" inManagedObjectContext:appDelegate.managedObjectContext];
             
             account.type = self.typeLabel.text;
-            account.money = self.moneyTextField.text;
+            // 截取money的小数点
+            [self setMoneyToAccount:account];
             account.incomeType = self.incomeType;
             account.date = self.dateLabel.text;
             
@@ -163,6 +156,42 @@
     }
 }
 
+- (void)setMoneyToAccount:(Account *)account {
+    NSString *moneyInput = self.moneyTextField.text;
+    if ([moneyInput containsString:@"."]) {
+        NSString *dotString = [moneyInput substringFromIndex:[moneyInput rangeOfString:@"."].location]; // 截取小数点后(包括小数点)的string
+        
+        if (dotString.length == 1) {
+            // 若只有一个小数点，去掉最后一个小数点
+            account.money = [moneyInput substringToIndex:moneyInput.length - 1];
+        } else if (dotString.length == moneyInput.length) {
+            // 若小数点在首位
+            account.money = [@"0" stringByAppendingString:dotString];
+        } else {
+            // 若小数点后大于一位，则保留一位(精确到角)
+            account.money = [moneyInput substringToIndex:[moneyInput rangeOfString:@"."].location + 2];
+        }
+    } else {
+        // 若为整数
+        account.money = self.moneyTextField.text;
+    }
+
+}
+
+- (void)presentAlertControllerWithMessage:(NSString *)message {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}];
+    
+    [alertController addAction:action];
+    
+    // 弹出alertController之前先将所有的键盘收回，否则会导致之后键盘不响应
+    [self.moneyTextField resignFirstResponder];
+    [self.detailTextView resignFirstResponder];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+
+}
 
 // 自定义右侧取消按钮
 - (void)customizeRightButton {

@@ -26,9 +26,9 @@
 
 @property (strong, nonatomic) NSMutableArray *monthExpense; // 每个月的支出金额
 
-@property (assign, nonatomic) NSInteger totalIncome; // 总收入
+@property (assign, nonatomic) double totalIncome; // 总收入
 
-@property (assign, nonatomic) NSInteger totalExpense; // 总支出
+@property (assign, nonatomic) double totalExpense; // 总支出
 
 @property (strong, nonatomic) NSArray *uniqueDateArray; // 储存不重复月份的数组
 
@@ -94,8 +94,8 @@
 
 - (void)calculateMonthsMoney {
     // 先将数据取得添加到暂时数组中，防止每次调用这方法在没有数据改变的情况下金额显示增大
-    NSInteger tmpTotalIncome = 0;
-    NSInteger tmpTotalExpense = 0;
+    double tmpTotalIncome = 0;
+    double tmpTotalExpense = 0;
     NSMutableArray *tmpMonthIncome = [NSMutableArray array];
     NSMutableArray *tmpMonthExpense = [NSMutableArray array];
     
@@ -109,13 +109,13 @@
         NSError *error = nil;
         NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
         
-        NSInteger income = 0;
-        NSInteger expense = 0;
+        double income = 0;
+        double expense = 0;
         for (Account *account in results) {
             if ([account.incomeType isEqualToString:@"income"]) {
-                income += [account.money integerValue];
+                income += [account.money doubleValue];
             } else {
-                expense += [account.money integerValue];
+                expense += [account.money doubleValue];
             }
         }
         
@@ -125,12 +125,11 @@
         
         // 并将结果暂时储存在收入/支出数组相应月份在uniqueDateArray的位置
         // 方便到时候设置cell的各个属性
-        [tmpMonthIncome addObject:[NSString stringWithFormat:@"%ld", (long)income]];
-        [tmpMonthExpense addObject:[NSString stringWithFormat:@"%ld", (long)expense]];
+        [tmpMonthIncome addObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:income]]];
+        [tmpMonthExpense addObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:expense]]];
         
     }
-    
-    
+        
     // 将暂存值赋给属性以显示在UI上
     self.totalIncome = tmpTotalIncome;
     self.totalExpense = tmpTotalExpense;
@@ -141,12 +140,14 @@
 }
 
 - (void)setTotalLabel {
-    NSMutableAttributedString *mutString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"总收入: %ld  总支出: %ld", (long)self.totalIncome, (long)self.totalExpense]];
-    
     // 示意图: 总收入: xxx(不限长度)  总支出: xxx(不限长度)
-    NSString *incomeString = [NSString stringWithFormat:@"%ld", (long)self.totalIncome];
-    NSString *expenseString = [NSString stringWithFormat:@"%ld", (long)self.totalExpense];
+    NSString *incomeString = [NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:self.totalIncome]];
+    NSString *expenseString = [NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:self.totalExpense]];
 
+    
+    NSMutableAttributedString *mutString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"总收入: %@  总支出: %@", incomeString, expenseString]];
+    
+    
     [mutString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 4)];
     
     [mutString addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(5, incomeString.length)];
@@ -159,9 +160,9 @@
     
     
     // 计算结余
-    NSInteger remainMoney = self.totalIncome - self.totalExpense;
+    double remainMoney = self.totalIncome - self.totalExpense;
     
-    self.remainMoneyLabel.text = [NSString stringWithFormat:@"结余: %ld", (long)remainMoney];
+    self.remainMoneyLabel.text = [NSString stringWithFormat:@"结余: %@", [NSNumber numberWithDouble:remainMoney]];
     
 }
 

@@ -28,9 +28,9 @@
 @property (strong, nonatomic) NSMutableArray *dayExpense; // 每天的支出金额
 
 
-@property (nonatomic, assign) NSInteger totalIncome; // 总收入
+@property (nonatomic, assign) double totalIncome; // 总收入
 
-@property (nonatomic, assign) NSInteger totalExpense; // 总支出
+@property (nonatomic, assign) double totalExpense; // 总支出
 
 @property (strong, nonatomic) NSArray *uniqueDateArray; // 储存不重复月份的数组
 
@@ -96,8 +96,8 @@
 
 - (void)calculateDayMoney {
     // 防止叠加，暂存数组，暂存总额
-    NSInteger tmpTotalIncome = 0;
-    NSInteger tmpTotalExpense = 0;
+    double tmpTotalIncome = 0;
+    double tmpTotalExpense = 0;
 
     NSMutableArray *tmpDayIncome = [NSMutableArray array];
     NSMutableArray *tmpDayExpense = [NSMutableArray array];
@@ -109,22 +109,22 @@
         NSError *error = nil;
         NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
 
-        NSInteger income = 0;
-        NSInteger expense = 0;
+        double income = 0;
+        double expense = 0;
         
         for (Account *account in results) {
             if ([account.incomeType isEqualToString:@"income"]) {
-                income += [account.money integerValue];
+                income += [account.money doubleValue];
             } else {
-                expense += [account.money integerValue];
+                expense += [account.money doubleValue];
             }
         }
         
         tmpTotalIncome += income;
         tmpTotalExpense += expense;
         
-        [tmpDayIncome addObject:[NSString stringWithFormat:@"%ld", (long)income]];
-        [tmpDayExpense addObject:[NSString stringWithFormat:@"%ld", (long)expense]];
+        [tmpDayIncome addObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:income]]];
+        [tmpDayExpense addObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:expense]]];
     }
     
     self.totalIncome = tmpTotalIncome;
@@ -135,11 +135,13 @@
 }
 
 - (void)setTotalLabel {
-    NSMutableAttributedString *mutString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"本月收入: %ld  本月支出: %ld", (long)self.totalIncome, (long)self.totalExpense]];
-    
     // 示意图: 总收入: xxx(不限长度)  总支出: xxx(不限长度)
-    NSString *incomeString = [NSString stringWithFormat:@"%ld", (long)self.totalIncome];
-    NSString *expenseString = [NSString stringWithFormat:@"%ld", (long)self.totalExpense];
+    NSString *incomeString = [NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:self.totalIncome]];
+    NSString *expenseString = [NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:self.totalExpense]];
+    
+    NSMutableAttributedString *mutString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"本月收入: %@  本月支出: %@", incomeString, expenseString]];
+    
+    
     
     [mutString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 5)];
     
@@ -153,9 +155,9 @@
     
     
     // 计算结余
-    NSInteger remainMoney = self.totalIncome - self.totalExpense;
+    double remainMoney = self.totalIncome - self.totalExpense;
     
-    self.remainMoneyLabel.text = [NSString stringWithFormat:@"结余: %ld", (long)remainMoney];
+    self.remainMoneyLabel.text = [NSString stringWithFormat:@"结余: %@", [NSNumber numberWithDouble:remainMoney]];
     
 }
 

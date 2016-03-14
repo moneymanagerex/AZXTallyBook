@@ -74,16 +74,20 @@
 
 - (void)calculateMoneySumAndSetText {
     // 计算结余总金额
-    NSInteger moneySum = 0;
+    double moneySum = 0;
     for (Account *account in self.fetchedResults) {
         if ([account.incomeType isEqualToString:@"income"]) {
-            moneySum += [account.money integerValue];
+            NSLog(@"income %f", [account.money doubleValue]);
+            moneySum += [account.money doubleValue];
         } else {
-            moneySum -= [account.money integerValue];
+            NSLog(@"expense %f", [account.money doubleValue]);
+            moneySum -= [account.money doubleValue];
         }
     }
     
-    NSString *moneySumString = [NSString stringWithFormat:@"今日结余: %ld", (long)moneySum];
+    NSLog(@"sum %@ %f", [NSNumber numberWithDouble:moneySum], moneySum);
+    
+    NSString *moneySumString = [NSString stringWithFormat:@"今日结余: %@", [NSNumber numberWithDouble:moneySum]];
     
     NSMutableAttributedString *mutString = [[NSMutableAttributedString alloc] initWithString:moneySumString];
     

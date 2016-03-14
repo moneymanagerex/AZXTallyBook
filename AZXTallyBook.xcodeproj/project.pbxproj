@@ -23,6 +23,7 @@
 		7F077CFA1C92B0D400D85707 /* AZXMonthHIstoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077CF91C92B0D400D85707 /* AZXMonthHIstoryViewController.m */; };
 		7F077D031C93F67700D85707 /* AZXPieView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D021C93F67700D85707 /* AZXPieView.m */; };
 		7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D061C940B9700D85707 /* AZXPieViewController.m */; };
+		7F077D4B1C9516CD00D85707 /* AZXPieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */; };
 		7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */; };
 		7FF2307D1C8FC4200065F312 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF2307B1C8FC4200065F312 /* Account.m */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,8 @@
 		7F077D021C93F67700D85707 /* AZXPieView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieView.m; sourceTree = "<group>"; };
 		7F077D051C940B9700D85707 /* AZXPieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXPieViewController.h; sourceTree = "<group>"; };
 		7F077D061C940B9700D85707 /* AZXPieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieViewController.m; sourceTree = "<group>"; };
+		7F077D491C9516CD00D85707 /* AZXPieTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXPieTableViewCell.h; sourceTree = "<group>"; };
+		7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieTableViewCell.m; sourceTree = "<group>"; };
 		7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account+CoreDataProperties.h"; sourceTree = "<group>"; };
 		7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Account+CoreDataProperties.m"; sourceTree = "<group>"; };
 		7FF2307A1C8FC4200065F312 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
@@ -138,7 +141,6 @@
 				7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */,
 				7F057DB91C8D6B28003DA3C7 /* LaunchScreen.storyboard */,
 				7F057DBC1C8D6B28003DA3C7 /* Info.plist */,
-				7F057DB41C8D6B28003DA3C7 /* AZXTallyBook.xcdatamodeld */,
 				7F057DA81C8D6B28003DA3C7 /* Supporting Files */,
 			);
 			path = AZXTallyBook;
@@ -219,6 +221,7 @@
 			children = (
 				7F057DAB1C8D6B28003DA3C7 /* AppDelegate.h */,
 				7F057DAC1C8D6B28003DA3C7 /* AppDelegate.m */,
+				7F057DB41C8D6B28003DA3C7 /* AZXTallyBook.xcdatamodeld */,
 				7FF230341C8E75960065F312 /* managedObject */,
 			);
 			name = CoreData;
@@ -291,6 +294,7 @@
 			children = (
 				7F077D081C940B9C00D85707 /* Controller */,
 				7F077D091C940BA700D85707 /* PieView */,
+				7F077D4C1C9516D200D85707 /* pieTableViewCell */,
 			);
 			name = "饼状图";
 			sourceTree = "<group>";
@@ -311,6 +315,15 @@
 				7F077D021C93F67700D85707 /* AZXPieView.m */,
 			);
 			name = PieView;
+			sourceTree = "<group>";
+		};
+		7F077D4C1C9516D200D85707 /* pieTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D491C9516CD00D85707 /* AZXPieTableViewCell.h */,
+				7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */,
+			);
+			name = pieTableViewCell;
 			sourceTree = "<group>";
 		};
 		7FF230341C8E75960065F312 /* managedObject */ = {
@@ -467,6 +480,7 @@
 				7F057DAD1C8D6B28003DA3C7 /* AppDelegate.m in Sources */,
 				7F057DAA1C8D6B28003DA3C7 /* main.m in Sources */,
 				7F057DE61C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m in Sources */,
+				7F077D4B1C9516CD00D85707 /* AZXPieTableViewCell.m in Sources */,
 				7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */,
 				7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */,
 				7F077D031C93F67700D85707 /* AZXPieView.m in Sources */,
