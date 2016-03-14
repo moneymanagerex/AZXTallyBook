@@ -29,6 +29,8 @@
 
 @property (nonatomic, strong) NSArray *typeArray; // 存放各个类型，以便如果是从别的界面转来可以选中该行
 
+@property (nonatomic, strong) NSUserDefaults *defaults;
+
 @end
 
 @implementation AZXAccountViewController
@@ -43,6 +45,7 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = appDelegate.managedObjectContext;
     
+    self.defaults = [NSUserDefaults standardUserDefaults];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -150,7 +153,9 @@
     Account *account = [self.fetchedResults objectAtIndex:indexPath.row];
     cell.typeName.text = account.type;
     cell.money.text = account.money;
-    cell.typeImage.image = [UIImage imageNamed:cell.typeName.text];
+    
+    // 此处的图片名称通过相应的type作为key从NSUserDefaults中取出
+    cell.typeImage.image = [UIImage imageNamed:[self.defaults objectForKey:cell.typeName.text]];
     
     // 根据类型选择不同颜色
     if ([account.incomeType isEqualToString:@"income"]) {

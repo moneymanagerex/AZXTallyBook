@@ -51,7 +51,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     // 自定义"返回"按钮(左侧)
     [self customizeLeftButton];
     
@@ -311,6 +311,14 @@
         // 保存至userDefaults中
         [self.userDefaults setObject:self.incomeArray forKey:@"income"];
         [self.userDefaults setObject:self.expenseArray forKey:@"expense"];
+        
+        // 将type名当做key，将图片的名称当做object(这里暂时这两者是一样的，如果用户修改了类别的名称，则将新的type名当做key与图片的名称相关联)
+        for (NSString *string in self.incomeArray) {
+            [self.userDefaults setObject:string forKey:string];
+        }
+        for (NSString *string in self.expenseArray) {
+            [self.userDefaults setObject:string forKey:string];
+        }
     }
     // 将incomeType默认为支出
     if (self.incomeType == nil) {

@@ -25,6 +25,9 @@
 		7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D061C940B9700D85707 /* AZXPieViewController.m */; };
 		7F077D4B1C9516CD00D85707 /* AZXPieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */; };
 		7F077D501C966B8000D85707 /* AZXTypeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D4F1C966B8000D85707 /* AZXTypeDetailViewController.m */; };
+		7F077D541C96C73F00D85707 /* AZXSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D531C96C73F00D85707 /* AZXSettingTableViewController.m */; };
+		7F077D591C96D37C00D85707 /* AZXOperateTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D581C96D37C00D85707 /* AZXOperateTypeTableViewController.m */; };
+		7F077D5D1C96D47700D85707 /* AZXOperateTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D5C1C96D47700D85707 /* AZXOperateTypeTableViewCell.m */; };
 		7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */; };
 		7FF2307D1C8FC4200065F312 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF2307B1C8FC4200065F312 /* Account.m */; };
 /* End PBXBuildFile section */
@@ -82,6 +85,12 @@
 		7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieTableViewCell.m; sourceTree = "<group>"; };
 		7F077D4E1C966B8000D85707 /* AZXTypeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXTypeDetailViewController.h; sourceTree = "<group>"; };
 		7F077D4F1C966B8000D85707 /* AZXTypeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXTypeDetailViewController.m; sourceTree = "<group>"; };
+		7F077D521C96C73F00D85707 /* AZXSettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXSettingTableViewController.h; sourceTree = "<group>"; };
+		7F077D531C96C73F00D85707 /* AZXSettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXSettingTableViewController.m; sourceTree = "<group>"; };
+		7F077D571C96D37C00D85707 /* AZXOperateTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXOperateTypeTableViewController.h; sourceTree = "<group>"; };
+		7F077D581C96D37C00D85707 /* AZXOperateTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXOperateTypeTableViewController.m; sourceTree = "<group>"; };
+		7F077D5B1C96D47700D85707 /* AZXOperateTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXOperateTypeTableViewCell.h; sourceTree = "<group>"; };
+		7F077D5C1C96D47700D85707 /* AZXOperateTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXOperateTypeTableViewCell.m; sourceTree = "<group>"; };
 		7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account+CoreDataProperties.h"; sourceTree = "<group>"; };
 		7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Account+CoreDataProperties.m"; sourceTree = "<group>"; };
 		7FF2307A1C8FC4200065F312 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
@@ -140,8 +149,9 @@
 				7F057DE91C8D6C5B003DA3C7 /* 记账 */,
 				7F077CED1C926D4B00D85707 /* 账本 */,
 				7F077D041C93F68E00D85707 /* 统计 */,
-				7F057DB71C8D6B28003DA3C7 /* Assets.xcassets */,
+				7F077D561C96C79000D85707 /* 设置 */,
 				7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */,
+				7F057DB71C8D6B28003DA3C7 /* Assets.xcassets */,
 				7F057DB91C8D6B28003DA3C7 /* LaunchScreen.storyboard */,
 				7F057DBC1C8D6B28003DA3C7 /* Info.plist */,
 				7F057DA81C8D6B28003DA3C7 /* Supporting Files */,
@@ -347,6 +357,43 @@
 			name = "类型详细";
 			sourceTree = "<group>";
 		};
+		7F077D551C96C74C00D85707 /* 设置首页 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D521C96C73F00D85707 /* AZXSettingTableViewController.h */,
+				7F077D531C96C73F00D85707 /* AZXSettingTableViewController.m */,
+			);
+			name = "设置首页";
+			sourceTree = "<group>";
+		};
+		7F077D561C96C79000D85707 /* 设置 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D551C96C74C00D85707 /* 设置首页 */,
+				7F077D5A1C96D38300D85707 /* 类别管理 */,
+				7F077D5E1C96D48800D85707 /* operateTableViewCell */,
+			);
+			name = "设置";
+			sourceTree = "<group>";
+		};
+		7F077D5A1C96D38300D85707 /* 类别管理 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D571C96D37C00D85707 /* AZXOperateTypeTableViewController.h */,
+				7F077D581C96D37C00D85707 /* AZXOperateTypeTableViewController.m */,
+			);
+			name = "类别管理";
+			sourceTree = "<group>";
+		};
+		7F077D5E1C96D48800D85707 /* operateTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D5B1C96D47700D85707 /* AZXOperateTypeTableViewCell.h */,
+				7F077D5C1C96D47700D85707 /* AZXOperateTypeTableViewCell.m */,
+			);
+			name = operateTableViewCell;
+			sourceTree = "<group>";
+		};
 		7FF230341C8E75960065F312 /* managedObject */ = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +540,8 @@
 			files = (
 				7FF2307D1C8FC4200065F312 /* Account.m in Sources */,
 				7F077CFA1C92B0D400D85707 /* AZXMonthHIstoryViewController.m in Sources */,
+				7F077D541C96C73F00D85707 /* AZXSettingTableViewController.m in Sources */,
+				7F077D591C96D37C00D85707 /* AZXOperateTypeTableViewController.m in Sources */,
 				7F057DED1C8DA504003DA3C7 /* AZXAccountTableViewCell.m in Sources */,
 				7F077CF11C926DCC00D85707 /* AZXAllHistoryViewController.m in Sources */,
 				7F057DE51C8D6B8E003DA3C7 /* AZXAccountViewController.m in Sources */,
@@ -501,6 +550,7 @@
 				7F057DAD1C8D6B28003DA3C7 /* AppDelegate.m in Sources */,
 				7F057DAA1C8D6B28003DA3C7 /* main.m in Sources */,
 				7F057DE61C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m in Sources */,
+				7F077D5D1C96D47700D85707 /* AZXOperateTypeTableViewCell.m in Sources */,
 				7F077D4B1C9516CD00D85707 /* AZXPieTableViewCell.m in Sources */,
 				7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */,
 				7F077D501C966B8000D85707 /* AZXTypeDetailViewController.m in Sources */,
