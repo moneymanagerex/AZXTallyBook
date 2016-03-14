@@ -27,6 +27,8 @@
 
 @property (nonatomic, strong) NSMutableArray *fetchedResults;
 
+@property (nonatomic, strong) NSArray *typeArray; // 存放各个类型，以便如果是从别的界面转来可以选中该行
+
 @end
 
 @implementation AZXAccountViewController
@@ -46,7 +48,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.passedDate) { // 将控制器的标题设为该新账本所在的日期
+    if (self.passedDate) { // 若有别处传来的日期(此时是那个没有记账按钮的UI在显示)
         self.navigationItem.title = self.passedDate;
     } else {
         // 刚打开应用时，将passedDate设为当前日期(为了在fetchAccount时能筛选并展示当天的账单)
@@ -63,6 +65,34 @@
     
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (self.selectedType) {
+        // 如果是从统计类型界面跳转而来
+        NSArray *indexArray = [self indexsOfObject:self.selectedType InArray:self.typeArray];
+
+        // 将相应type的行背景加深
+        for (NSNumber *indexNumber in indexArray) {
+            AZXAccountTableViewCell *cell = [self.accountTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[indexNumber integerValue] inSection:0]];
+            
+            cell.backgroundColor = [UIColor lightGrayColor];
+        }
+    }
+}
+
+// 返回一个含有该object相同的元素所在index的数组，且元素被封装成NSNumber
+- (NSArray *)indexsOfObject:(id)object InArray:(NSArray *)array {
+    NSMutableArray *tmpArray = [NSMutableArray array];
+
+    for (NSInteger i = 0; i < array.count; i++) {
+        id obj = array[i];
+        if ([obj isEqual:object]) {
+            [tmpArray addObject:[NSNumber numberWithInteger:i]];
+        }
+    }
+    return [tmpArray copy];
+}
+
 - (void)fetchAccounts {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
     
@@ -70,6 +100,17 @@
     
     NSError *error = nil;
     self.fetchedResults = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:request error:&error]];
+    
+    // 暂时储存类型
+    NSMutableArray *tmpTypeArray = [NSMutableArray array];
+    
+    for (NSInteger i = 0; i < self.fetchedResults.count; i++) {
+        Account *account = self.fetchedResults[i];
+        [tmpTypeArray addObject:account.type];
+    }
+    
+    // 这一步是为从统计类型界面跳转而来做准备的，为了进入界面就默认从所有类型中选中该类型
+    self.typeArray = [tmpTypeArray copy];
 }
 
 - (void)calculateMoneySumAndSetText {

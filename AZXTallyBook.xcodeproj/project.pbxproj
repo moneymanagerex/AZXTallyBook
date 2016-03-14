@@ -24,6 +24,7 @@
 		7F077D031C93F67700D85707 /* AZXPieView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D021C93F67700D85707 /* AZXPieView.m */; };
 		7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D061C940B9700D85707 /* AZXPieViewController.m */; };
 		7F077D4B1C9516CD00D85707 /* AZXPieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */; };
+		7F077D501C966B8000D85707 /* AZXTypeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D4F1C966B8000D85707 /* AZXTypeDetailViewController.m */; };
 		7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */; };
 		7FF2307D1C8FC4200065F312 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF2307B1C8FC4200065F312 /* Account.m */; };
 /* End PBXBuildFile section */
@@ -79,6 +80,8 @@
 		7F077D061C940B9700D85707 /* AZXPieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieViewController.m; sourceTree = "<group>"; };
 		7F077D491C9516CD00D85707 /* AZXPieTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXPieTableViewCell.h; sourceTree = "<group>"; };
 		7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXPieTableViewCell.m; sourceTree = "<group>"; };
+		7F077D4E1C966B8000D85707 /* AZXTypeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXTypeDetailViewController.h; sourceTree = "<group>"; };
+		7F077D4F1C966B8000D85707 /* AZXTypeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXTypeDetailViewController.m; sourceTree = "<group>"; };
 		7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account+CoreDataProperties.h"; sourceTree = "<group>"; };
 		7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Account+CoreDataProperties.m"; sourceTree = "<group>"; };
 		7FF2307A1C8FC4200065F312 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
@@ -136,7 +139,7 @@
 				7F077CE91C926CC000D85707 /* CoreData */,
 				7F057DE91C8D6C5B003DA3C7 /* 记账 */,
 				7F077CED1C926D4B00D85707 /* 账本 */,
-				7F077D041C93F68E00D85707 /* 饼状图 */,
+				7F077D041C93F68E00D85707 /* 统计 */,
 				7F057DB71C8D6B28003DA3C7 /* Assets.xcassets */,
 				7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */,
 				7F057DB91C8D6B28003DA3C7 /* LaunchScreen.storyboard */,
@@ -289,14 +292,14 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
-		7F077D041C93F68E00D85707 /* 饼状图 */ = {
+		7F077D041C93F68E00D85707 /* 统计 */ = {
 			isa = PBXGroup;
 			children = (
-				7F077D081C940B9C00D85707 /* Controller */,
-				7F077D091C940BA700D85707 /* PieView */,
+				7F077D4D1C966B5600D85707 /* 饼状图 */,
 				7F077D4C1C9516D200D85707 /* pieTableViewCell */,
+				7F077D511C966B8500D85707 /* 类型详细 */,
 			);
-			name = "饼状图";
+			name = "统计";
 			sourceTree = "<group>";
 		};
 		7F077D081C940B9C00D85707 /* Controller */ = {
@@ -324,6 +327,24 @@
 				7F077D4A1C9516CD00D85707 /* AZXPieTableViewCell.m */,
 			);
 			name = pieTableViewCell;
+			sourceTree = "<group>";
+		};
+		7F077D4D1C966B5600D85707 /* 饼状图 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D081C940B9C00D85707 /* Controller */,
+				7F077D091C940BA700D85707 /* PieView */,
+			);
+			name = "饼状图";
+			sourceTree = "<group>";
+		};
+		7F077D511C966B8500D85707 /* 类型详细 */ = {
+			isa = PBXGroup;
+			children = (
+				7F077D4E1C966B8000D85707 /* AZXTypeDetailViewController.h */,
+				7F077D4F1C966B8000D85707 /* AZXTypeDetailViewController.m */,
+			);
+			name = "类型详细";
 			sourceTree = "<group>";
 		};
 		7FF230341C8E75960065F312 /* managedObject */ = {
@@ -482,6 +503,7 @@
 				7F057DE61C8D6B8E003DA3C7 /* AZXNewAccountTableViewController.m in Sources */,
 				7F077D4B1C9516CD00D85707 /* AZXPieTableViewCell.m in Sources */,
 				7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */,
+				7F077D501C966B8000D85707 /* AZXTypeDetailViewController.m in Sources */,
 				7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */,
 				7F077D031C93F67700D85707 /* AZXPieView.m in Sources */,
 			);

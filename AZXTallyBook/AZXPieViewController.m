@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "Account.h"
 #import "AZXPieTableViewCell.h"
+#import "AZXTypeDetailViewController.h"
 #import <CoreData/CoreData.h>
 
 @interface AZXPieViewController () <UITableViewDataSource, AZXPieViewDataSource>
@@ -24,6 +25,8 @@
 @property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *rightSwipe; // 右滑手势
 
 @property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *leftSwipe; // 左滑手势
+
+@property (strong, nonatomic) UILabel *nullLabel; // 用来显示"暂无数据"
 
 @property (strong, nonatomic) NSString *incomeType;
 
@@ -125,7 +128,13 @@
     [self.pieView removeAllLabel];
 }
 
+
+
 - (void)refreshAll {
+    [self.pieView removeAllLabel];
+    
+    [self.nullLabel removeFromSuperview];
+    
     [self fetchData];
     
     [self filterData];
@@ -141,6 +150,9 @@
     // 分别设置左右滑动手势
     self.leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     self.rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    
+    [self.view addGestureRecognizer:self.leftSwipe];
+    [self.view addGestureRecognizer:self.rightSwipe];
     
     self.leftSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
     self.rightSwipe.direction = UISwipeGestureRecognizerDirectionRight;
@@ -161,7 +173,8 @@
         [comps setMonth:-1];
         self.currentDate = [calendar dateByAddingComponents:comps toDate:self.currentDate options:0];
     }
-    NSLog(@"hehe");
+    
+    [self refreshAll];
 }
 
 - (void)fetchData {
@@ -184,6 +197,18 @@
     
     NSError *error = nil;
     self.dataArray = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if (self.dataArray.count == 0) {
+        NSLog(@"null!!!!!!!!!!!!!!!");
+        // 如果没有数据，中间显示"暂无数据"
+        self.nullLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+        self.nullLabel.text = @"暂无数据";
+        self.nullLabel.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+        self.nullLabel.textColor = [UIColor lightGrayColor];
+        [self.nullLabel sizeToFit];
+        self.nullLabel.center = self.view.center;
+        [self.view addSubview:self.nullLabel];
+    }
 }
 
 
@@ -372,14 +397,25 @@
     return self.uniqueTypeArray;
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"showTypeDetail"]) {
+        if ([[segue destinationViewController] isKindOfClass:[AZXTypeDetailViewController class]]) {
+            AZXTypeDetailViewController *viewController = [segue destinationViewController];
+            viewController.date = self.currentDateString;
+            
+            viewController.incomeType = self.incomeType;
+            
+            NSIndexPath *indexPath = [self.typeTableView indexPathForSelectedRow];
+            
+            viewController.type = self.uniqueTypeArray[indexPath.row];
+            
+        }
+    }
 }
-*/
+
 
 @end

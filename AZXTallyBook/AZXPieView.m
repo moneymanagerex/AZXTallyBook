@@ -66,7 +66,7 @@
     [path moveToPoint:center];
     
     [path addArcWithCenter:center radius:radius startAngle:startAngle endAngle:startAngle + 2*M_PI*percent clockwise:YES];
-    NSLog(@"center %@ radius %f startAngle %f endAngle %f", NSStringFromCGPoint(center), radius, startAngle, startAngle + 2*M_PI*percent);
+
     [path addLineToPoint:center];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
@@ -77,7 +77,7 @@
     
     label.backgroundColor = [UIColor clearColor];
     
-    label.font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+    label.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
     
     label.textAlignment = NSTextAlignmentCenter;
     
@@ -105,11 +105,9 @@
 }
 
 - (void)removeAllLabel {
-    NSLog(@"label%@", self.labelArray);
-    for (NSInteger i = 0; i < self.labelArray.count; i++) {
-        [(UILabel *)self.labelArray[i] removeFromSuperview];
+    for (UILabel *label in self.labelArray) {
+        [label removeFromSuperview];
     }
-    NSLog(@"label%@", self.labelArray);
 }
 
 @end
