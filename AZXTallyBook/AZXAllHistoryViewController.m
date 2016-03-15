@@ -30,7 +30,7 @@
 
 @property (assign, nonatomic) double totalExpense; // 总支出
 
-@property (strong, nonatomic) NSArray *uniqueDateArray; // 储存不重复月份的数组
+@property (strong, nonatomic) NSMutableArray *uniqueDateArray; // 储存不重复月份的数组
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @end
@@ -50,6 +50,25 @@
     self.monthIncome = [NSMutableArray array];
     self.monthExpense = [NSMutableArray array];
     
+    [self judgeFirstLoadThisView];
+}
+
+- (void)judgeFirstLoadThisView {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    if (![defaults boolForKey:@"haveLoadedAZXAllHistoryViewController"]) {
+        // 第一次进入此页面
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"教程" message:@"首页显示所有月份的账单总额，点击相应月份查看该月份所有天数的详细内容，手指左滑可删除相应行的记录" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"知道了，不再提醒" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [defaults setBool:YES forKey:@"haveLoadedAZXNewAccountTableViewController"];
+        }];
+        
+        [alert addAction:actionOK];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -88,7 +107,7 @@
     
     // 再得到排序后的数组
     NSArray *sortDesc = @[[[NSSortDescriptor alloc] initWithKey:nil ascending:YES]];
-    self.uniqueDateArray = [set sortedArrayUsingDescriptors:sortDesc];
+    self.uniqueDateArray = [NSMutableArray arrayWithArray:[set sortedArrayUsingDescriptors:sortDesc]];
     
 }
 
@@ -217,6 +236,38 @@
     [mutString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(16, 7)];
 
     return mutString;
+}
+
+#pragma mark - UITabelView Delegate
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // 取得相应日期的数据
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"date beginswith[c] %@", self.uniqueDateArray[indexPath.row]]];
+        NSError *error = nil;
+        NSArray *accountToBeDeleted = [self.managedObjectContext executeFetchRequest:request error:&error];
+        
+        // 首先删除CoreData里的数据
+        for (Account *account in accountToBeDeleted) {
+            [self.managedObjectContext deleteObject:account];
+        }
+        // 然后移除提供数据源的数组
+        [self.uniqueDateArray removeObjectAtIndex:indexPath.row];
+        // 删除tableView的行
+        [self.monthTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        // 最后更新UI
+        [self calculateMonthsMoney];
+        
+        [self setTotalLabel];
+        
+        [self.monthTableView reloadData];
+    }
 }
 
 

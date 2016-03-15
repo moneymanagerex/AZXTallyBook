@@ -32,7 +32,7 @@
 
 @property (nonatomic, assign) double totalExpense; // 总支出
 
-@property (strong, nonatomic) NSArray *uniqueDateArray; // 储存不重复月份的数组
+@property (strong, nonatomic) NSMutableArray *uniqueDateArray; // 储存不重复日期的数组
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
@@ -91,7 +91,7 @@
     
     NSArray *SortDesc = @[[[NSSortDescriptor alloc] initWithKey:nil ascending:YES]];
     
-    self.uniqueDateArray = [set sortedArrayUsingDescriptors:SortDesc];
+    self.uniqueDateArray = [NSMutableArray arrayWithArray:[set sortedArrayUsingDescriptors:SortDesc]];
 }
 
 - (void)calculateDayMoney {
@@ -216,6 +216,37 @@
     return mutString;
 }
 
+#pragma mark - UITabelView Delegate
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // 取得相应月份的数据
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"date == %@", self.uniqueDateArray[indexPath.row]]];
+        NSError *error = nil;
+        NSArray *accountToBeDeleted = [self.managedObjectContext executeFetchRequest:request error:&error];
+        
+        // 首先删除CoreData里的数据
+        for (Account *account in accountToBeDeleted) {
+            [self.managedObjectContext deleteObject:account];
+        }
+        // 然后移除提供数据源的数组
+        [self.uniqueDateArray removeObjectAtIndex:indexPath.row];
+        // 删除tableView的行
+        [self.dayTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        // 最后更新UI
+        [self calculateDayMoney];
+        
+        [self setTotalLabel];
+        
+        [self.dayTableView reloadData];
+    }
+}
 
 
 #pragma mark - Navigation

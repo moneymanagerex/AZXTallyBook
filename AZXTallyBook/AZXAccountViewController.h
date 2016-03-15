@@ -6,7 +6,7 @@
 //  Copyright © 2016年 azx. All rights reserved.
 //
 
-// 这个Controller
+// 这个Controller有两个不同的UI(有按钮、无按钮)
 
 #import <UIKit/UIKit.h>
 

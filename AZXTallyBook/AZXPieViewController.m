@@ -115,7 +115,27 @@
     
     [self setSwipeGesture];
     
+    [self judgeFirstLoadThisView];
 }
+
+- (void)judgeFirstLoadThisView {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if (![defaults boolForKey:@"haveLoadedAZXPieViewController"]) {
+        // 第一次进入此页面
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"教程" message:@"首页显示本月的收支统计图，手指左右划动屏幕可改变当前显示月份，要查看某一类别的详细情况，点击该行" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"知道了，不再提醒" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [defaults setBool:YES forKey:@"haveLoadedAZXPieViewController"];
+        }];
+        
+        [alert addAction:actionOK];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+    }
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

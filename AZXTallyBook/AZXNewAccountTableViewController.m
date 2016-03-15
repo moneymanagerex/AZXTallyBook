@@ -93,6 +93,30 @@
         self.moneyTextField.delegate = self;
 
     }
+    
+    // 判断是否第一次进入界面
+    [self judgeFirstLoadThisView];
+}
+
+- (void)judgeFirstLoadThisView {
+    // 创建userDefault单例对象
+    self.userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (![self.userDefaults boolForKey:@"haveLoadedAZXNewAccountTableViewController"]) {
+        // 第一次进入此页面
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"教程" message:@"输入金额、类别、以及日期，点左上角的保存按钮保存，右上角按钮取消" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"知道了，不再提醒" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.userDefaults setBool:YES forKey:@"haveLoadedAZXNewAccountTableViewController"];
+        }];
+        
+        [alert addAction:actionOK];
+        
+        
+        [self.moneyTextField resignFirstResponder];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -108,7 +132,7 @@
 #pragma mark - customize left and right button
 
 - (void)customizeLeftButton {
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:@"<保存" style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonPressed:)];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonPressed:)];
     
     self.navigationItem.leftBarButtonItem = leftItem;
 }
@@ -296,12 +320,9 @@
 #pragma mark - set data for pickerView
 
 - (void)setDefaultDataForPickerView {
-    // 创建userDefault单例对象
-    self.userDefaults = [NSUserDefaults standardUserDefaults];
-    
     // 从userDefault中获取数据
-    self.incomeArray = [self.userDefaults objectForKey:@"income"];
-    self.expenseArray = [self.userDefaults objectForKey:@"expense"];
+    self.incomeArray = [self.userDefaults objectForKey:@"incomeAZX"];
+    self.expenseArray = [self.userDefaults objectForKey:@"expenseAZX"];
     
     if (self.incomeArray.count == 0 || self.expenseArray.count == 0) {
         //若第一次进入应用，则为其设置默认的收入支出种类
@@ -309,8 +330,8 @@
         self.expenseArray = [NSMutableArray arrayWithArray:@[@"餐饮食品", @"交通路费", @"日常用品", @"服装首饰", @"学习教育", @"烟酒消费", @"房租水电", @"网上购物", @"运动健身", @"电子产品", @"化妆护理", @"医疗体检", @"游戏娱乐", @"外出旅游", @"油费维护", @"慈善捐赠", @"其他支出"]];
         
         // 保存至userDefaults中
-        [self.userDefaults setObject:self.incomeArray forKey:@"income"];
-        [self.userDefaults setObject:self.expenseArray forKey:@"expense"];
+        [self.userDefaults setObject:self.incomeArray forKey:@"incomeAZX"];
+        [self.userDefaults setObject:self.expenseArray forKey:@"expenseAZX"];
         
         // 将type名当做key，将图片的名称当做object(这里暂时这两者是一样的，如果用户修改了类别的名称，则将新的type名当做key与图片的名称相关联)
         for (NSString *string in self.incomeArray) {
