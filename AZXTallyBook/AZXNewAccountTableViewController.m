@@ -144,7 +144,11 @@
     } else if ([self.moneyTextField.text componentsSeparatedByString:@"."].count > 2) {
         // 输入超过两个小数点
         [self presentAlertControllerWithMessage:@"输入金额不格式不符"];
-    } else {
+    } else if ([self moneyTextContainsCharacterOtherThanNumber]) {
+        // 输入纯数字以外的字符
+        [self presentAlertControllerWithMessage:@"输入金额只能是数字"];
+    }
+    else {
         if (self.isSegueFromTableView) {
             // 若是从tableView传来的，则只需更新account就好
             self.accountInSelectedRow.type = self.typeLabel.text;
@@ -215,6 +219,31 @@
     
     [self presentViewController:alertController animated:YES completion:nil];
 
+}
+
+- (BOOL)moneyTextContainsCharacterOtherThanNumber {
+    if (![self isPureInt:self.moneyTextField.text] || ![self isPureFloat:self.moneyTextField.text]) {
+        // 如果出现了纯数字以外的字符，返回YES
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+//判断是否为整形
+
+- (BOOL)isPureInt:(NSString*)string{
+    NSScanner* scan = [NSScanner scannerWithString:string];
+    int val;
+    return[scan scanInt:&val] && [scan isAtEnd];
+}
+
+//判断是否为浮点形
+
+- (BOOL)isPureFloat:(NSString*)string{
+    NSScanner* scan = [NSScanner scannerWithString:string];
+    float val;
+    return[scan scanFloat:&val] && [scan isAtEnd];
 }
 
 // 自定义右侧取消按钮

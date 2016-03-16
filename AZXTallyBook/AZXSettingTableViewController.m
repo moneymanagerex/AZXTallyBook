@@ -224,11 +224,9 @@
         [self alertChangeCode];
     } else if (self.codeSwitch.isOn && indexPath.section == 0 && indexPath.row == 2) {
         [self changeProtectQuestion];
-    }
-    
-    if (indexPath.section == 2 && indexPath.row == 0) {
+    } else if (indexPath.section == 2 && indexPath.row == 0) {
         // 清除所有数据
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"警告" message:@"没有备份的数据删除后将无法找回，建议先在iCloud备份" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"警告" message:@"全部数据删除后将无法找回" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"确定删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             [self deleteAllAccounts];
@@ -239,9 +237,29 @@
         [alert addAction:actionCancel];
         [alert addAction:actionOK];
         
-        [self presentViewController:alert animated:YES completion:nil];
+        [self presentViewController:alert animated:YES completion:^ {
+            NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }];
     }
 }
+
+- (void)deleteAllAccounts {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
+    
+    NSError *error = nil;
+    NSArray *allAccounts = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
+    
+    // 将所有account删除
+    for (Account *account in allAccounts) {
+        [appDelegate.managedObjectContext deleteObject:account];
+    }
+}
+
+
+#pragma mark - change Code and protect question methods
 
 - (void)alertChangeCode {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"设置" message:@"请输入旧的密码，以验证身份" preferredStyle:UIAlertControllerStyleAlert];
@@ -293,7 +311,11 @@
     [alert addAction:actionCancel];
     [alert addAction:actionOK];
     
-    [self presentViewController:alert animated:YES completion:nil];
+    [self presentViewController:alert animated:YES completion:^ {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }];
+
     
     
 }
@@ -334,9 +356,10 @@
     [alert2 addAction:actionCancel2];
     [alert2 addAction:actionOK2];
     
-    NSLog(@"present 2");
-    
-    [self presentViewController:alert2 animated:YES completion:nil];
+    [self presentViewController:alert2 animated:YES completion:^ {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }];
     
 }
 
@@ -396,23 +419,13 @@
     [alert addAction:actionCancel];
     [alert addAction:actionOK];
     
-    [self presentViewController:alert animated:YES completion:nil];
+    [self presentViewController:alert animated:YES completion:^ {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }];
 
 }
 
-- (void)deleteAllAccounts {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
-    
-    NSError *error = nil;
-    NSArray *allAccounts = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
-    
-    // 将所有account删除
-    for (Account *account in allAccounts) {
-        [appDelegate.managedObjectContext deleteObject:account];
-    }
-}
 
 - (void)changeSuccessfully {
     UIAlertController *success = [UIAlertController alertControllerWithTitle:@"" message:@"修改成功" preferredStyle:UIAlertControllerStyleAlert];
@@ -420,10 +433,11 @@
     
     [success addAction:ok];
     
-    [self presentViewController:success animated:YES completion:nil];
-//    [self presentViewController:success animated:YES completion:^{
-//        <#code#>
-//    }];
+    [self presentViewController:success animated:YES completion:^ {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }];
+
 }
 
 - (void)changeProtectQuestion {
@@ -447,7 +461,10 @@
     [changeQuestion addAction:actionCancel];
     [changeQuestion addAction:actionOK];
     
-    [self presentViewController:changeQuestion animated:YES completion:nil];
+    [self presentViewController:changeQuestion animated:YES completion:^ {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }];
     
 }
 

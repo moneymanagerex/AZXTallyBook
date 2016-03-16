@@ -124,9 +124,19 @@
 }
 
 - (void)showProtectQuestion {
-    UIAlertController *question = [UIAlertController alertControllerWithTitle:@"输入答案" message:[NSString stringWithFormat:@"%@", [self.defaults objectForKey:@"questionAZX"]] preferredStyle:UIAlertControllerStyleAlert];
+    NSString *title = [NSString string];
+    NSString *message = [NSString string];
+    if ([self.defaults objectForKey:@"questionAZX"] == nil) {
+        // 如果未设置密保问题
+        title = @"提示";
+        message = @"未设置密保问题";
+    } else {
+        // 如果设置了密保问题
+        title = @"输入答案";
+        message = [NSString stringWithFormat:@"%@", [self.defaults objectForKey:@"questionAZX"]];
+    }
     
-    [question addTextFieldWithConfigurationHandler:nil];
+    UIAlertController *question = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if ([question.textFields[0].text isEqualToString:[self.defaults objectForKey:@"answerAZX"]]) {
@@ -138,10 +148,22 @@
         }
     }];
     
-    UIAlertAction *no = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *no = [UIAlertAction actionWithTitle:@"返回" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        // 点击返回，返回输入密码对话框
+        [self judgeWhetherNeedCode];
+    }];
     
-    [question addAction:no];
-    [question addAction:ok];
+    if ([self.defaults objectForKey:@"questionAZX"] == nil) {
+        // 如果未设置密保问题
+        [question addAction:no];
+    } else {
+        // 如果设置了密保问题，加入输入文本框
+        [question addTextFieldWithConfigurationHandler:nil];
+
+        [question addAction:no];
+        [question addAction:ok];
+
+    }
     
     [self presentViewController:question animated:YES completion:nil];
 }

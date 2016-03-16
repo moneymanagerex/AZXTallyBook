@@ -14,6 +14,9 @@
 
 #import "AZXOperateTypeTableViewController.h"
 #import "AZXOperateTypeTableViewCell.h"
+#import "AppDelegate.h"
+#import "Account.h"
+#import <CoreData/CoreData.h>
 
 @interface AZXOperateTypeTableViewController ()
 
@@ -22,6 +25,8 @@
 @property (nonatomic, strong) NSString *incomeType;
 
 @property (nonatomic, strong) NSUserDefaults *defaults;
+
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @end
 
@@ -39,6 +44,8 @@
     
     self.defaults = [NSUserDefaults standardUserDefaults];
     
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = appDelegate.managedObjectContext;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -162,9 +169,15 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"确定删除\"%@\"?", self.typeArray[indexPath.row]] preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        // 将要删除的类别名与图片名称的关联除去
+        [self.defaults removeObjectForKey:self.typeArray[indexPath.row]];
+
+        // 将所有此类别的账单一并移去
+        [self removeAllAccountOfOneType:self.typeArray[indexPath.row]];
+        
         // 将其移除
         [self.typeArray removeObjectAtIndex:indexPath.row];
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];        
         
         // 保存数据
         [self.defaults setObject:self.typeArray forKey:[self.incomeType stringByAppendingString:@"AZX"]];
@@ -178,6 +191,18 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)removeAllAccountOfOneType:(NSString *)type {
+    // 删除所有此类别的account
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"type == %@", type]];
+
+    NSError *error = nil;
+    NSArray *accounts = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    for (Account *account in accounts) {
+        [self.managedObjectContext deleteObject:account];
+    }
+}
 
 #pragma mark - Rename methods
 
