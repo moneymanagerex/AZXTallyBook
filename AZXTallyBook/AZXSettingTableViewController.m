@@ -14,6 +14,7 @@
 
 #import "AZXSettingTableViewController.h"
 #import "AZXOperateTypeTableViewController.h"
+#import "AZXAddTypeViewController.h"
 #import "AppDelegate.h"
 #import "Account.h"
 #import <CoreData/CoreData.h>
@@ -472,18 +473,16 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"addOrDeleteType"]) {
-        // 如果是添加或删除类别
-        AZXOperateTypeTableViewController *viewController = [segue destinationViewController];
-        viewController.operationType = @"addOrDeleteType";
+    if ([segue.identifier isEqualToString:@"addNewType"]) {
+        // 如果是添加新类别
     } else if ([segue.identifier isEqualToString:@"changeType"]) {
         // 如果是重命名类别
         AZXOperateTypeTableViewController *viewController = [segue destinationViewController];
         viewController.operationType = @"changeType";
-    } else if ([segue.identifier isEqualToString:@"moveType"]) {
+    } else if ([segue.identifier isEqualToString:@"deleteAndMoveType"]) {
         // 如果是移动类别位置
         AZXOperateTypeTableViewController *viewController = [segue destinationViewController];
-        viewController.operationType = @"moveType";
+        viewController.operationType = @"deleteAndMoveType";
     }
 }
 

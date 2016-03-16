@@ -28,6 +28,9 @@
 		7F077D541C96C73F00D85707 /* AZXSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D531C96C73F00D85707 /* AZXSettingTableViewController.m */; };
 		7F077D591C96D37C00D85707 /* AZXOperateTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D581C96D37C00D85707 /* AZXOperateTypeTableViewController.m */; };
 		7F077D5D1C96D47700D85707 /* AZXOperateTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F077D5C1C96D47700D85707 /* AZXOperateTypeTableViewCell.m */; };
+		7F10B83A1C9939CC00A8F3AF /* AZXAddTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F10B8391C9939CB00A8F3AF /* AZXAddTypeViewController.m */; };
+		7F10B83E1C9942F200A8F3AF /* AZXAddTypeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F10B83D1C9942F200A8F3AF /* AZXAddTypeCollectionViewCell.m */; };
+		7F10B8461C99970C00A8F3AF /* UIViewController+BackButtonHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F10B8441C99970C00A8F3AF /* UIViewController+BackButtonHandler.m */; };
 		7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */; };
 		7FF2307D1C8FC4200065F312 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF2307B1C8FC4200065F312 /* Account.m */; };
 /* End PBXBuildFile section */
@@ -91,6 +94,12 @@
 		7F077D581C96D37C00D85707 /* AZXOperateTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXOperateTypeTableViewController.m; sourceTree = "<group>"; };
 		7F077D5B1C96D47700D85707 /* AZXOperateTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXOperateTypeTableViewCell.h; sourceTree = "<group>"; };
 		7F077D5C1C96D47700D85707 /* AZXOperateTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXOperateTypeTableViewCell.m; sourceTree = "<group>"; };
+		7F10B8381C9939CB00A8F3AF /* AZXAddTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXAddTypeViewController.h; sourceTree = "<group>"; };
+		7F10B8391C9939CB00A8F3AF /* AZXAddTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAddTypeViewController.m; sourceTree = "<group>"; };
+		7F10B83C1C9942F200A8F3AF /* AZXAddTypeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXAddTypeCollectionViewCell.h; sourceTree = "<group>"; };
+		7F10B83D1C9942F200A8F3AF /* AZXAddTypeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXAddTypeCollectionViewCell.m; sourceTree = "<group>"; };
+		7F10B8431C99970C00A8F3AF /* UIViewController+BackButtonHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+BackButtonHandler.h"; sourceTree = "<group>"; };
+		7F10B8441C99970C00A8F3AF /* UIViewController+BackButtonHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+BackButtonHandler.m"; sourceTree = "<group>"; };
 		7FF230781C8FC4200065F312 /* Account+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account+CoreDataProperties.h"; sourceTree = "<group>"; };
 		7FF230791C8FC4200065F312 /* Account+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Account+CoreDataProperties.m"; sourceTree = "<group>"; };
 		7FF2307A1C8FC4200065F312 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
@@ -371,7 +380,7 @@
 			children = (
 				7F077D551C96C74C00D85707 /* 设置首页 */,
 				7F077D5A1C96D38300D85707 /* 类别管理 */,
-				7F077D5E1C96D48800D85707 /* operateTableViewCell */,
+				7F10B83B1C9939D000A8F3AF /* 添加类别 */,
 			);
 			name = "设置";
 			sourceTree = "<group>";
@@ -381,6 +390,7 @@
 			children = (
 				7F077D571C96D37C00D85707 /* AZXOperateTypeTableViewController.h */,
 				7F077D581C96D37C00D85707 /* AZXOperateTypeTableViewController.m */,
+				7F077D5E1C96D48800D85707 /* operateTableViewCell */,
 			);
 			name = "类别管理";
 			sourceTree = "<group>";
@@ -392,6 +402,36 @@
 				7F077D5C1C96D47700D85707 /* AZXOperateTypeTableViewCell.m */,
 			);
 			name = operateTableViewCell;
+			sourceTree = "<group>";
+		};
+		7F10B83B1C9939D000A8F3AF /* 添加类别 */ = {
+			isa = PBXGroup;
+			children = (
+				7F10B8381C9939CB00A8F3AF /* AZXAddTypeViewController.h */,
+				7F10B8391C9939CB00A8F3AF /* AZXAddTypeViewController.m */,
+				7F10B8451C99970C00A8F3AF /* UIViewController+BackButtonHandler */,
+				7F10B83F1C9942F700A8F3AF /* collectionViewCell */,
+			);
+			name = "添加类别";
+			sourceTree = "<group>";
+		};
+		7F10B83F1C9942F700A8F3AF /* collectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				7F10B83C1C9942F200A8F3AF /* AZXAddTypeCollectionViewCell.h */,
+				7F10B83D1C9942F200A8F3AF /* AZXAddTypeCollectionViewCell.m */,
+			);
+			name = collectionViewCell;
+			sourceTree = "<group>";
+		};
+		7F10B8451C99970C00A8F3AF /* UIViewController+BackButtonHandler */ = {
+			isa = PBXGroup;
+			children = (
+				7F10B8431C99970C00A8F3AF /* UIViewController+BackButtonHandler.h */,
+				7F10B8441C99970C00A8F3AF /* UIViewController+BackButtonHandler.m */,
+			);
+			name = "UIViewController+BackButtonHandler";
+			path = "../../../../Downloads/UIViewController-BackButtonHandler-BackBtnHandlerSample";
 			sourceTree = "<group>";
 		};
 		7FF230341C8E75960065F312 /* managedObject */ = {
@@ -539,11 +579,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FF2307D1C8FC4200065F312 /* Account.m in Sources */,
+				7F10B83A1C9939CC00A8F3AF /* AZXAddTypeViewController.m in Sources */,
 				7F077CFA1C92B0D400D85707 /* AZXMonthHIstoryViewController.m in Sources */,
 				7F077D541C96C73F00D85707 /* AZXSettingTableViewController.m in Sources */,
 				7F077D591C96D37C00D85707 /* AZXOperateTypeTableViewController.m in Sources */,
 				7F057DED1C8DA504003DA3C7 /* AZXAccountTableViewCell.m in Sources */,
 				7F077CF11C926DCC00D85707 /* AZXAllHistoryViewController.m in Sources */,
+				7F10B8461C99970C00A8F3AF /* UIViewController+BackButtonHandler.m in Sources */,
 				7F057DE51C8D6B8E003DA3C7 /* AZXAccountViewController.m in Sources */,
 				7F077CF61C926E9300D85707 /* AZXAllHistoryTableViewCell.m in Sources */,
 				7F057DB61C8D6B28003DA3C7 /* AZXTallyBook.xcdatamodeld in Sources */,
@@ -555,6 +597,7 @@
 				7FF2307C1C8FC4200065F312 /* Account+CoreDataProperties.m in Sources */,
 				7F077D501C966B8000D85707 /* AZXTypeDetailViewController.m in Sources */,
 				7F077D071C940B9700D85707 /* AZXPieViewController.m in Sources */,
+				7F10B83E1C9942F200A8F3AF /* AZXAddTypeCollectionViewCell.m in Sources */,
 				7F077D031C93F67700D85707 /* AZXPieView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -416,6 +416,10 @@
     }
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // 将detele改为删除
+    return @" 删除 ";
+}
 
 #pragma mark - PassingDateDelegate
 

@@ -46,12 +46,35 @@
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = appDelegate.managedObjectContext;
+    
+    if ([self.operationType isEqualToString:@"deleteAndMoveType"]) {
+        // 如果是删除和移动类别操作，并且第一次进入此界面，弹出教程
+        [self judgeFirstLoadThisView];
+        
+        // 进入编辑模式
+        [self.tableView setEditing:YES animated:YES];
+    }
 }
+
+- (void)judgeFirstLoadThisView {
+    if (![self.defaults boolForKey:@"haveLoadedAZXOperateTypeTableViewControllerAddAndDelete"]) {
+        // 第一次进入此页面
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"教程" message:@"点击类别左边的红色减号删除，按住并拖动右边的三杠符号进行位置排序" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"知道了，不再提醒" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.defaults setBool:YES forKey:@"haveLoadedAZXOperateTypeTableViewControllerAddAndDelete"];
+        }];
+        
+        [alert addAction:actionOK];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     // 将要退出界面时，将数组数据保存
-    NSLog(@"保存%@", self.typeArray);
     [self.defaults setObject:self.typeArray forKey:[self.incomeType stringByAppendingString:@"AZX"]];
 }
 
@@ -85,17 +108,6 @@
         self.typeArray = [NSMutableArray arrayWithArray:[self.defaults objectForKey:@"expenseAZX"]];
     }
     
-    // 若为删除/添加操作，则右上角加一个添加按钮
-    if ([self.operationType isEqualToString:@"addOrDeleteType"]) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addType)];
-    } else if ([self.operationType isEqualToString:@"moveType"]) {
-        [self.tableView setEditing:YES animated:YES];
-    }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -110,16 +122,10 @@
     
     cell.type.text = self.typeArray[indexPath.row];
     
-    if ([self.operationType isEqualToString:@"addOrDeleteType"]) {
-        // 进行加减操作，为删除label添加点击事件
-        cell.operation.text = @"删除";
-        cell.operation.userInteractionEnabled = YES;
-        
-        UITapGestureRecognizer *tapLabel = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDelete:)];
-        
-        [cell.operation addGestureRecognizer:tapLabel];
-        
-    } else if ([self.operationType isEqualToString:@"changeType"]) {
+    // 得到类别名相应的图片
+    cell.image.image = [UIImage imageNamed:[self.defaults objectForKey:cell.type.text]];
+    
+    if ([self.operationType isEqualToString:@"changeType"]) {
         // 进行重命名操作
         cell.operation.text = @"重命名";
         cell.operation.userInteractionEnabled = YES;
@@ -127,12 +133,9 @@
         UITapGestureRecognizer *tapLabel = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRename:)];
         
         [cell.operation addGestureRecognizer:tapLabel];
-
-        
-    } else if ([self.operationType isEqualToString:@"moveType"]) {
-        // 进行排序操作
-        cell.operation.text = @"按住拖动";
-        
+    } else if ([self.operationType isEqualToString:@"deleteAndMoveType"]) {
+        // 进行排序和删除操作
+        cell.operation.text = @"";
     }
     
     return cell;
@@ -161,48 +164,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-
-- (void)tapDelete:(UITapGestureRecognizer *)gesture {
-    // 通过点击位置确定点击的cell位置
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[gesture locationInView:self.tableView]];
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"确定删除\"%@\"?", self.typeArray[indexPath.row]] preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        // 将要删除的类别名与图片名称的关联除去
-        [self.defaults removeObjectForKey:self.typeArray[indexPath.row]];
-
-        // 将所有此类别的账单一并移去
-        [self removeAllAccountOfOneType:self.typeArray[indexPath.row]];
-        
-        // 将其移除
-        [self.typeArray removeObjectAtIndex:indexPath.row];
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:YES];        
-        
-        // 保存数据
-        [self.defaults setObject:self.typeArray forKey:[self.incomeType stringByAppendingString:@"AZX"]];
-    }];
-    
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-    
-    [alert addAction:actionCancel];
-    [alert addAction:actionOK];
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)removeAllAccountOfOneType:(NSString *)type {
-    // 删除所有此类别的account
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"type == %@", type]];
-
-    NSError *error = nil;
-    NSArray *accounts = [self.managedObjectContext executeFetchRequest:request error:&error];
-    
-    for (Account *account in accounts) {
-        [self.managedObjectContext deleteObject:account];
-    }
-}
 
 #pragma mark - Rename methods
 
@@ -249,15 +210,11 @@
 #pragma mark - Move tableView delegate methods
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.operationType isEqualToString:@"moveType"]) {
+    if ([self.operationType isEqualToString:@"deleteAndMoveType"]) {
         return YES;
     } else {
         return NO;
     }
-}
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
@@ -271,25 +228,41 @@
     [self.defaults setObject:self.typeArray forKey:[self.incomeType stringByAppendingString:@"AZX"]];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
+        // 将要删除的类别名与图片名称的关联除去
+        [self.defaults removeObjectForKey:self.typeArray[indexPath.row]];
+        
+        // 将所有此类别的账单一并移去
+        [self removeAllAccountOfOneType:self.typeArray[indexPath.row]];
+        
+        // 将其从tableView中移除
+        [self.typeArray removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        
+        // 保存数据
+        [self.defaults setObject:self.typeArray forKey:[self.incomeType stringByAppendingString:@"AZX"]];
+    }
 }
-*/
+
+- (void)removeAllAccountOfOneType:(NSString *)type {
+    // 删除所有此类别的account
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Account"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"type == %@", type]];
+    
+    NSError *error = nil;
+    NSArray *accounts = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    for (Account *account in accounts) {
+        [self.managedObjectContext deleteObject:account];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // 将detele改为删除
+    return @" 删除 ";
+}
 
 /*
 #pragma mark - Navigation
