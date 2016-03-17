@@ -61,7 +61,7 @@
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"教程" message:@"首页显示所有月份的账单总额，点击相应月份查看该月份所有天数的详细内容，手指左滑可删除相应行的记录" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"知道了，不再提醒" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [defaults setBool:YES forKey:@"haveLoadedAZXNewAccountTableViewController"];
+            [defaults setBool:YES forKey:@"haveLoadedAZXAllHistoryViewController"];
         }];
         
         [alert addAction:actionOK];

@@ -147,8 +147,7 @@
     } else if ([self moneyTextContainsCharacterOtherThanNumber]) {
         // 输入纯数字以外的字符
         [self presentAlertControllerWithMessage:@"输入金额只能是数字"];
-    }
-    else {
+    } else {
         if (self.isSegueFromTableView) {
             // 若是从tableView传来的，则只需更新account就好
             self.accountInSelectedRow.type = self.typeLabel.text;
@@ -160,6 +159,8 @@
             // 若是必填项都已填好且要记新帐，则将属性保存在CoreData中
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             
+            
+            NSLog(@"insert");
             Account *account = [NSEntityDescription insertNewObjectForEntityForName:@"Account" inManagedObjectContext:appDelegate.managedObjectContext];
             
             account.type = self.typeLabel.text;
@@ -179,8 +180,7 @@
         }
         
         // 跳转到前一界面
-        NSInteger index = [self.navigationController.viewControllers indexOfObject:self];
-        [self.navigationController popToViewController:self.navigationController.viewControllers[index-1] animated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

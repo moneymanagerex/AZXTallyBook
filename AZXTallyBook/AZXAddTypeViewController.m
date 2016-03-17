@@ -18,11 +18,15 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *typeTextField;
 
-@property (strong, nonatomic) NSMutableArray *typeArray; // 存放各种类别
+@property (strong, nonatomic) NSMutableArray *typeArray; // 存放各种类别名称(用来显示collectionView中图片的数据源)
 
 @property (strong, nonatomic) NSUserDefaults *defaults;
 
 @property (strong, nonatomic) NSString *incomeType;
+
+@property (strong, nonatomic) NSMutableArray *incomeArray; // 收入类别数组
+
+@property (strong, nonatomic) NSMutableArray *expenseArray; // 支出类别数组
 
 @property (strong, nonatomic) UIView *shadowView; // 实现点击空白区域返回键盘的隔层
 
@@ -87,6 +91,7 @@
     
     self.defaults = [NSUserDefaults standardUserDefaults];
     
+    // 一进入界面就弹出键盘
     [self.typeTextField becomeFirstResponder];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(rightBarItemPressed)];
@@ -96,13 +101,24 @@
     [super viewWillAppear:animated];
     
     // 取得支出收入的所有类型
-    self.typeArray = [NSMutableArray arrayWithArray:[self.defaults objectForKey:@"expenseAZX"]];
-    self.typeArray = [NSMutableArray arrayWithArray:[self.typeArray arrayByAddingObjectsFromArray:[self.defaults objectForKey:@"incomeAZX"]]];
+    self.expenseArray = [NSMutableArray arrayWithArray:[self.defaults objectForKey:@"expenseAZX"]];
+    self.incomeArray = [NSMutableArray arrayWithArray:[self.defaults objectForKey:@"incomeAZX"]];
+    
+    if (![self.defaults objectForKey:@"imagesShowInAZXAddTypeViewController"]) {
+        // 如果还未保存显示在这界面的图片数组
+        self.typeArray = [NSMutableArray arrayWithArray:@[@"餐饮食品", @"交通路费", @"日常用品", @"服装首饰", @"学习教育", @"烟酒消费", @"房租水电", @"网上购物", @"运动健身", @"电子产品", @"化妆护理", @"医疗体检", @"游戏娱乐", @"外出旅游", @"油费维护", @"慈善捐赠", @"其他支出", @"工资薪酬", @"奖金福利", @"生意经营", @"投资理财", @"彩票中奖", @"银行利息", @"其他收入"]];
+        [self.defaults setObject:self.typeArray forKey:@"imagesShowInAZXAddTypeViewController"];
+    } else {
+        self.typeArray = [NSMutableArray arrayWithArray:[self.defaults objectForKey:@"imagesShowInAZXAddTypeViewController"]];
+    }
 }
 
 - (void)rightBarItemPressed {
-    // 若两者都已输入，将图片与类别名保存并联系起来
-    if (self.typeTextField.text && self.showImage.image) {
+    // 首先判断是否新类别名已存在，不允许重复
+    if ([self.expenseArray containsObject:self.typeTextField.text] || [self.incomeArray containsObject:self.typeTextField.text]) {
+        [self popoverAlertControllerWithMessage:@"类别名已存在，请使用新的类别名"];
+    } else if (self.typeTextField.text && self.showImage.image) {
+        // 若两者都已输入，将图片与类别名保存并联系起来
         [self savePhotoWithTypeName];
         
         // 跳回上一界面
@@ -125,7 +141,7 @@
 
 // 点击back按钮后调用 引用的他人写的一个extension
 - (BOOL)navigationShouldPopOnBackButton {
-    if (self.typeTextField.text && self.showImage.image) {
+    if (![self.typeTextField.text isEqualToString:@""] && self.showImage.image) {
         // 当二者都填上内容时，点击返回询问是否保存
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"还未保存，是否返回？" preferredStyle:UIAlertControllerStyleAlert];
         
@@ -152,13 +168,17 @@
         [self savePhotoFromAlbum];
     } else {
         // 如果是从已有的图片中选择的
+        NSInteger index = [self.typeCollectionView indexPathsForSelectedItems][0].row;
+        // 图片的名称(路径)
+        NSString *imageName = self.typeArray[index];
+        // 将二者关联起来
+        [self.defaults setObject:imageName forKey:self.typeTextField.text];
     }
 }
 
 - (void)savePhotoFromAlbum {
     NSData *data;
     if (UIImagePNGRepresentation(self.selectedPhoto) == nil) {
-        // 如果不是PNG格式，则用JPEG储存
         data = UIImageJPEGRepresentation(self.selectedPhoto, 1.0);
     }
     else {
@@ -172,13 +192,32 @@
     //文件管理器
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    //把刚刚图片转换的data对象拷贝至沙盒中 并保存为image.png
+    // 新类别名
+    NSString *type = self.typeTextField.text;
+    
+    //把刚刚图片转换的data对象拷贝至沙盒中 并保存为 类别名.png
     [fileManager createDirectoryAtPath:DocumentsPath withIntermediateDirectories:YES attributes:nil error:nil];
-    [fileManager createFileAtPath:[DocumentsPath stringByAppendingString:@"/image.png"] contents:data attributes:nil];
+    [fileManager createFileAtPath:[DocumentsPath stringByAppendingString:[NSString stringWithFormat:@"/%@.png", type]] contents:data attributes:nil];
     
     //得到选择后沙盒中图片的完整路径
-//    NSString *filePath = [[NSString alloc]initWithFormat:@"%@%@",DocumentsPath,  @"/image.png"];
+    NSString *filePath = [[NSString alloc]initWithFormat:@"%@%@",DocumentsPath, [NSString stringWithFormat:@"/%@.png", type]];
 
+    
+    // 将类别名与图片的储存路径关联起来，到时候取出图片时直接用[imageNamed:储存路径]方法
+    [self.defaults setObject:filePath forKey:type];
+    
+    // 将类别名加入相应的类别数组
+    if ([self.incomeType isEqualToString:@"income"]) {
+        [self.incomeArray addObject:type];
+        [self.defaults setObject:self.incomeArray forKey:@"incomeAZX"];
+    } else {
+        [self.expenseArray addObject:type];
+        [self.defaults setObject:self.expenseArray forKey:@"expenseAZX"];
+    }
+    
+    // 并将新加入的图片保存在此页面的typeArray，下次进入界面就会显示出来
+    [self.typeArray addObject:filePath];
+    [self.defaults setObject:self.typeArray forKey:@"imagesShowInAZXAddTypeViewController"];
 }
 
 #pragma mark - textField delegate methods
@@ -213,8 +252,12 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     AZXAddTypeCollectionViewCell *cell = [self.typeCollectionView dequeueReusableCellWithReuseIdentifier:@"typeImageCell" forIndexPath:indexPath];
-    // 得到相应类型的图片，其中保存在Assets中的图片名由userDefaults取得
-    cell.image.image = [UIImage imageNamed:[self.defaults objectForKey:self.typeArray[indexPath.row]]];
+    // 得到相应名称(路径)的图片，
+    cell.image.image = [UIImage imageNamed:self.typeArray[indexPath.row]];
+    UIView *backgroundView = [[UIView alloc] initWithFrame:cell.frame];
+    backgroundView.backgroundColor = [UIColor lightGrayColor];
+    
+    cell.selectedBackgroundView = backgroundView;
     
     return cell;
 }
@@ -223,48 +266,39 @@
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.selectedIndexOfImage) {
-        // 如果之前存在被选中的item
-        AZXAddTypeCollectionViewCell *cell = (AZXAddTypeCollectionViewCell *)[self.typeCollectionView cellForItemAtIndexPath:self.selectedIndexOfImage];
-        cell.backgroundColor = [UIColor whiteColor];
-    }
-    
     AZXAddTypeCollectionViewCell *cell = (AZXAddTypeCollectionViewCell *)[self.typeCollectionView cellForItemAtIndexPath:indexPath];
-    cell.backgroundColor = [UIColor lightGrayColor];
     
-    // 将新的item的indexPath设为已选择
-    self.selectedIndexOfImage = indexPath;
-    
-    self.showImage.image = cell.image.image; // 显示选中的图片
+    // 显示选中的图片
+    self.showImage.image = cell.image.image;
     
     // 设为从已有图片选择
     self.isFromAlbum = NO;
-    
 }
+
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat totalWidth = self.typeCollectionView.frame.size.width;
-    CGFloat totalHeight = self.typeCollectionView.frame.size.height;
-    // cell为正方形，检验一行4个cell是否会超出collectionView的范围(事实上超出也没事，只是我无法处理因为cell重用导致的cell滑出界面后出现的选中背景色随机出现在各个cell上的问题)
-    // 如果一行4个会超出，则一行加一个，直至不会超出
-    int columns = 4;
-    // 计算可以容纳的行数
-    int rows = (int)totalHeight / (totalWidth / (columns + 1));
-    while (rows * columns < self.typeArray.count) {
-        // 如果不能容纳，则列数加一
-        columns++;
-        rows = (int)totalHeight / (totalWidth / (columns + 1));
-    }
-    return CGSizeMake(totalWidth / columns , totalWidth / columns);
+
+    // 一行显示4个cell
+    return CGSizeMake(totalWidth / 4 , totalWidth / 4);
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
 }
 
 
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:^ {
+        // 如果之前屏幕上有选中的图片，将屏幕上被选中的cell给deselect掉
+        if ([self.typeCollectionView indexPathsForSelectedItems].count != 0) {
+            [self.typeCollectionView deselectItemAtIndexPath:[self.typeCollectionView indexPathsForSelectedItems][0] animated:YES];
+        }
+    }];
     
     NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
     

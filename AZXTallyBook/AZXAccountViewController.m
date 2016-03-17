@@ -53,7 +53,6 @@
     
     // 判断是否需要输入密码
     [self judgeWhetherNeedCode];
-
 }
 
 - (void)judgeFirstLoadThisView {
@@ -273,6 +272,7 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy-MM-dd";
         self.passedDate = [dateFormatter stringFromDate:[NSDate date]];
+        self.navigationItem.title = self.passedDate;
     }
     
     [self fetchAccounts];
