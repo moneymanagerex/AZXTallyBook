@@ -9,6 +9,7 @@
 #import "AZXNewAccountTableViewController.h"
 #import "AppDelegate.h"
 #import "AZXAccountViewController.h"
+#import "UIViewController+BackButtonHandler.h"
 
 @interface AZXNewAccountTableViewController () <UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -25,8 +26,6 @@
 @property (strong, nonatomic) UIPickerView *pickerView; // 类型选择器
 
 @property (strong, nonatomic) NSString *incomeType; //收入(income)还是支出(expense)
-
-@property (strong, nonatomic) UIBarButtonItem *doneButton;
 
 @property (strong, nonatomic) UIView *shadowView; // 插入的灰色夹层
 
@@ -52,10 +51,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // 自定义"返回"按钮(左侧)
-    [self customizeLeftButton];
-    
-    // 自定义"取消"按钮(右侧)
+    // 自定义"保存"按钮(右侧)
     [self customizeRightButton];
     
     // 判断是怎样转到这个界面的
@@ -129,15 +125,16 @@
     
 }
 
-#pragma mark - customize left and right button
+#pragma mark - customize right button
 
-- (void)customizeLeftButton {
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonPressed:)];
-    
-    self.navigationItem.leftBarButtonItem = leftItem;
+// 自定义右侧保存按钮
+- (void)customizeRightButton {
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(preserveButtonPressed:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
-- (void)backBarButtonPressed:(UIButton *)sender {
+
+- (void)preserveButtonPressed:(UIButton *)sender {
     if ([self.typeLabel.text isEqualToString:@"点击输入"] || [self.moneyTextField.text isEqualToString:@""]) {
         // type和money都是必填的，如果有一个没填，则弹出AlertController提示
         [self presentAlertControllerWithMessage:@"金钱数额和类型都是必填的"];
@@ -246,26 +243,27 @@
     return[scan scanFloat:&val] && [scan isAtEnd];
 }
 
-// 自定义右侧取消按钮
-- (void)customizeRightButton {
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelBarButtonPressed:)];
-    self.navigationItem.rightBarButtonItem = rightItem;
-}
 
-- (void)cancelBarButtonPressed:(UIButton *)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"确定取消？这笔账单将不会被保存" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        // 直接返回主界面并且不保存account
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"不，留在页面" style:UIAlertActionStyleCancel handler:nil];
-    
-    [alert addAction:cancelAction];
-    [alert addAction:okAction];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+// 借用一个开源的extension，点击系统的back按钮时，若内容都已输入，弹出弹框
+- (BOOL)navigationShouldPopOnBackButton {
+    if (![self.moneyTextField.text isEqualToString:@""] && ![self.typeLabel.text isEqualToString:@"点击输入"]) {
+        // 如果金额类别都填写了，弹出框询问是否保存
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"确定返回？这笔账单将不会被保存" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"返回" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            // 直接返回主界面并且不保存account
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"不，留在页面" style:UIAlertActionStyleCancel handler:nil];
+        
+        [alert addAction:cancelAction];
+        [alert addAction:okAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return NO;
+    }
+    return YES;
 }
-
 
 #pragma mark - Table view data source
 
@@ -299,8 +297,8 @@
             [self.view addSubview:self.datePicker];
         }
         
-        // 插入夹层以及加入按钮
-        [self insertShadowViewAndButton];
+        // 插入夹层
+        [self insertShadowView];
         
         //添加监听事件
         [self.datePicker addTarget:self action:@selector(datePickerValueDidChanged:) forControlEvents:UIControlEventValueChanged];
@@ -322,28 +320,24 @@
         self.pickerView.delegate = self;
         self.pickerView.dataSource = self;
         
-        // 插入夹层以及加入按钮
-        [self insertShadowViewAndButton];
+        // 插入夹层
+        [self insertShadowView];
         
     }
 }
 
 #pragma mark - insert shadow view and add button
 
-- (void)insertShadowViewAndButton {
+- (void)insertShadowView {
     //插入一个浅灰色的夹层
     [self insertGrayView];
     
     //点击picker外的灰色夹层也视为确认
     [self.shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pickerSelected)]];
     
-    //导航栏右边添加“完成”按钮
-    if (self.doneButton == nil) {
-        self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(pickerSelected)];
-    }
-    self.navigationItem.rightBarButtonItem = self.doneButton;
-    // 并将左边的保存按钮暂时隐藏起来
-    [self.navigationItem.leftBarButtonItem setTitle:@""];
+    // 暂时隐藏右侧的保存按钮
+    self.navigationItem.rightBarButtonItem = nil;
+    
 }
 
 #pragma mark - set data for pickerView
@@ -405,9 +399,6 @@
     [self.shadowView removeFromSuperview];
     self.shadowView = nil;
 
-    //恢复左边的保存按钮
-    [self.navigationItem.leftBarButtonItem setTitle:@"保存"];
-    
     //恢复右边的取消按钮
     [self customizeRightButton];
 }

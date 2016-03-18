@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xQt-tT-Guf">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -71,13 +70,13 @@
                                                         <constraint firstAttribute="width" constant="150" id="fQs-Zg-MZj"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbO-7f-bga">
                                                     <rect key="frame" x="203" y="8" width="370" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vkf-cs-d01">
@@ -546,7 +545,9 @@
         <scene sceneID="xPi-Iy-s43">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="PV3-Vu-0io" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="记账" id="Sk0-24-SZG"/>
+                    <tabBarItem key="tabBarItem" title="记账" image="记账" id="Sk0-24-SZG">
+                        <inset key="imageInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rd5-Wt-RZq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -566,7 +567,9 @@
         <scene sceneID="gZJ-99-hoB">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Use-Oc-73q" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="账本" id="Cdv-DQ-3BS"/>
+                    <tabBarItem key="tabBarItem" title="账本" image="账本" id="Cdv-DQ-3BS">
+                        <inset key="imageInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="y60-t6-RG5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -933,7 +936,9 @@
         <scene sceneID="1CU-hH-Hxh">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rpk-Qw-FHE" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="统计" id="e7K-Rd-gfW"/>
+                    <tabBarItem key="tabBarItem" title="统计" image="统计" id="e7K-Rd-gfW">
+                        <inset key="imageInsets" minX="4" minY="4" maxX="4" maxY="4"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="TZD-sF-cq4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1346,11 +1351,13 @@
             </objects>
             <point key="canvasLocation" x="1906" y="2019"/>
         </scene>
-        <!--Item-->
+        <!--设置-->
         <scene sceneID="awr-dD-hde">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Uws-Uj-h7N" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="kFI-Y7-7tu"/>
+                    <tabBarItem key="tabBarItem" title="设置" image="设置" id="kFI-Y7-7tu">
+                        <inset key="imageInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vvt-Id-LbR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1366,9 +1373,15 @@
             <point key="canvasLocation" x="180" y="2394"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="统计" width="41" height="42"/>
+        <image name="记账" width="51" height="51"/>
+        <image name="设置" width="50" height="50"/>
+        <image name="账本" width="50" height="46"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CXH-Ph-CXI"/>
-        <segue reference="f1f-tz-fnq"/>
         <segue reference="YpE-dh-EB9"/>
+        <segue reference="br4-IW-D40"/>
+        <segue reference="f1f-tz-fnq"/>
     </inferredMetricsTieBreakers>
 </document>
