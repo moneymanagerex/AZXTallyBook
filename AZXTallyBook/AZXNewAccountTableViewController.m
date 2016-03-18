@@ -10,10 +10,13 @@
 #import "AppDelegate.h"
 #import "AZXAccountViewController.h"
 #import "UIViewController+BackButtonHandler.h"
+#import "VENCalculatorInputTextField.h"
 
 @interface AZXNewAccountTableViewController () <UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *moneyTextField;
+@property (weak, nonatomic) IBOutlet UITextField *moneyTextField; // 只是为了标记位置，真正使用的是下面自定义的textField
+
+@property (strong, nonatomic) VENCalculatorInputTextField *customTextField; // 自定义textField，可弹出数字计算器键盘
 
 @property (weak, nonatomic) IBOutlet UILabel *typeLabel;
 
@@ -48,27 +51,58 @@
     return _isSegueFromTableView;
 }
 
+// 在viewDidAppear中才能确定控件layout之后的位置
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    // 第三方库的自定义数字计算器键盘，将其frame设为moneyTextField的frame，将其完全覆盖
+    if (!self.customTextField) {
+        self.customTextField = [[VENCalculatorInputTextField alloc] initWithFrame:self.moneyTextField.frame];
+        
+        self.customTextField.textAlignment = NSTextAlignmentRight;
+        self.customTextField.placeholder = @"输入金额";
+        self.customTextField.textColor = [UIColor redColor];
+        
+        // 设置代理
+        self.customTextField.delegate = self;
+        
+        // 加入自定义的textField，因为frame是其在超类的位置，这里讲自定义的textField加入其超类里面并提前到前面将其覆盖
+        [[self.moneyTextField superview] addSubview:self.customTextField];
+        [[self.moneyTextField superview] bringSubviewToFront:self.customTextField];
+    }
+    
+    
+    // 如果是从tableView传来，根据类别选择字体颜色
+    if (self.isSegueFromTableView) {
+        self.customTextField.text = self.accountInSelectedRow.money;
+        if ([self.incomeType isEqualToString:@"income"]) {
+            self.customTextField.textColor = [UIColor blueColor];
+        } else {
+            self.customTextField.textColor = [UIColor redColor];
+        }
+    }
+    
+    //一进入界面即弹出键盘输入金额
+    [self.customTextField becomeFirstResponder];
+
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // 自定义"保存"按钮(右侧)
     [self customizeRightButton];
+        
     
     // 判断是怎样转到这个界面的
     if (self.isSegueFromTableView) {
         // 如果是点击tableView而来，显示传递过来的各个属性
-        self.moneyTextField.text = self.accountInSelectedRow.money;
         self.dateLabel.text = self.accountInSelectedRow.date;
         self.detailTextView.text = self.accountInSelectedRow.detail;
         self.incomeType = self.accountInSelectedRow.incomeType;
         self.typeLabel.text = self.accountInSelectedRow.type;
         
-        if ([self.incomeType isEqualToString:@"income"]) {
-            self.moneyTextField.textColor = [UIColor blueColor];
-        } else {
-            self.moneyTextField.textColor = [UIColor redColor];
-        }
-
+        // money在Viewdidappear里设置
         
     } else {
         // 如果是点击记账按钮而来
@@ -82,12 +116,6 @@
         self.detailTextView.text = @"详细描述(选填)";
         self.detailTextView.textColor = [UIColor lightGrayColor];
         
-        
-        //一进入界面即弹出键盘输入金额
-        [self.moneyTextField becomeFirstResponder];
-        self.moneyTextField.keyboardType = UIKeyboardTypeDecimalPad;
-        self.moneyTextField.delegate = self;
-
     }
     
     // 判断是否第一次进入界面
@@ -109,7 +137,7 @@
         [alert addAction:actionOK];
         
         
-        [self.moneyTextField resignFirstResponder];
+        [self.customTextField resignFirstResponder];
         
         [self presentViewController:alert animated:YES completion:nil];
     }
@@ -135,10 +163,10 @@
 
 
 - (void)preserveButtonPressed:(UIButton *)sender {
-    if ([self.typeLabel.text isEqualToString:@"点击输入"] || [self.moneyTextField.text isEqualToString:@""]) {
+    if ([self.typeLabel.text isEqualToString:@"点击输入"] || [self.customTextField.text isEqualToString:@""]) {
         // type和money都是必填的，如果有一个没填，则弹出AlertController提示
         [self presentAlertControllerWithMessage:@"金钱数额和类型都是必填的"];
-    } else if ([self.moneyTextField.text componentsSeparatedByString:@"."].count > 2) {
+    } else if ([self.customTextField.text componentsSeparatedByString:@"."].count > 2) {
         // 输入超过两个小数点
         [self presentAlertControllerWithMessage:@"输入金额不格式不符"];
     } else if ([self moneyTextContainsCharacterOtherThanNumber]) {
@@ -182,7 +210,7 @@
 }
 
 - (void)setMoneyToAccount:(Account *)account {
-    NSString *moneyInput = self.moneyTextField.text;
+    NSString *moneyInput = self.customTextField.text;
     if ([moneyInput containsString:@"."]) {
         NSString *dotString = [moneyInput substringFromIndex:[moneyInput rangeOfString:@"."].location]; // 截取小数点后(包括小数点)的string
         
@@ -198,7 +226,7 @@
         }
     } else {
         // 若为整数
-        account.money = self.moneyTextField.text;
+        account.money = self.customTextField.text;
     }
 
 }
@@ -211,7 +239,7 @@
     [alertController addAction:action];
     
     // 弹出alertController之前先将所有的键盘收回，否则会导致之后键盘不响应
-    [self.moneyTextField resignFirstResponder];
+    [self.customTextField resignFirstResponder];
     [self.detailTextView resignFirstResponder];
     
     [self presentViewController:alertController animated:YES completion:nil];
@@ -219,7 +247,7 @@
 }
 
 - (BOOL)moneyTextContainsCharacterOtherThanNumber {
-    if (![self isPureInt:self.moneyTextField.text] || ![self isPureFloat:self.moneyTextField.text]) {
+    if (!([self isPureInt:self.customTextField.text] || [self isPureFloat:self.customTextField.text])) {
         // 如果出现了纯数字以外的字符，返回YES
         return YES;
     } else {
@@ -227,8 +255,18 @@
     }
 }
 
-//判断是否为整形
+- (NSString *)deleteDotsInString:(NSString *)string {
+    NSArray *subStrings = [string componentsSeparatedByString:@","];
+    
+    NSString *newString = [NSString string];
+    for (NSInteger i = 0; i < subStrings.count; i++) {
+        newString = [newString stringByAppendingString:subStrings[i]];
+    }
+    
+    return newString;
+}
 
+//判断是否为整形
 - (BOOL)isPureInt:(NSString*)string{
     NSScanner* scan = [NSScanner scannerWithString:string];
     int val;
@@ -236,7 +274,6 @@
 }
 
 //判断是否为浮点形
-
 - (BOOL)isPureFloat:(NSString*)string{
     NSScanner* scan = [NSScanner scannerWithString:string];
     float val;
@@ -246,23 +283,35 @@
 
 // 借用一个开源的extension，点击系统的back按钮时，若内容都已输入，弹出弹框
 - (BOOL)navigationShouldPopOnBackButton {
-    if (![self.moneyTextField.text isEqualToString:@""] && ![self.typeLabel.text isEqualToString:@"点击输入"]) {
+    if (self.isSegueFromTableView) {
+        // 如果是从tableView传来查看详细的，那只在用户修改了数据后弹出对话框提示
+        if (![self.customTextField.text isEqualToString:self.accountInSelectedRow.money] || ![self.typeLabel.text isEqualToString:self.accountInSelectedRow.type] || ![self.dateLabel.text isEqualToString:self.accountInSelectedRow.date] || ![self.detailTextView.text isEqualToString:self.accountInSelectedRow.detail]) {
+            
+            [self alertControllerAskWhetherStoreWithMessage:@"确定返回？修改将不会被保存"];
+            
+            return NO;
+        }
+    } else if (![self.customTextField.text isEqualToString:@""] && ![self.typeLabel.text isEqualToString:@"点击输入"]) {
         // 如果金额类别都填写了，弹出框询问是否保存
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"确定返回？这笔账单将不会被保存" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"返回" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            // 直接返回主界面并且不保存account
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"不，留在页面" style:UIAlertActionStyleCancel handler:nil];
-        
-        [alert addAction:cancelAction];
-        [alert addAction:okAction];
-        
-        [self presentViewController:alert animated:YES completion:nil];
+        [self alertControllerAskWhetherStoreWithMessage:@"确定返回？这笔账单将不会被保存"];
         
         return NO;
     }
     return YES;
+}
+
+- (void)alertControllerAskWhetherStoreWithMessage:(NSString *)message {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"返回" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        // 直接返回主界面并且不保存(更新)account
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"不，留在页面" style:UIAlertActionStyleCancel handler:nil];
+    
+    [alert addAction:cancelAction];
+    [alert addAction:okAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -427,12 +476,12 @@
 }
 
 
-#pragma mark - money text field delegate methods
+#pragma mark - custom text field delegate methods
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     //插入一个透明的夹层
     [self insertTransparentView];
-    [self.shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(textFieldResignKeyboard)]];
+    [self.shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(customTextFieldResignKeyboard)]];
 }
 
 
@@ -443,11 +492,15 @@
     self.shadowView = nil;
 }
 
-#pragma mark - text field resign first responder
-- (void)textFieldResignKeyboard {
-    [self.moneyTextField resignFirstResponder];
+#pragma mark - custom text field resign first responder
+- (void)customTextFieldResignKeyboard {
+    [self.customTextField resignFirstResponder];
     [self.shadowView removeFromSuperview];
     self.shadowView = nil;
+    
+    // 因为在大于三位数且存在小数点的情况下会默认每隔3位加一个逗号，将逗号都去掉
+    self.customTextField.text = [self deleteDotsInString:self.customTextField.text];
+    NSLog(@"text %@", self.customTextField.text);
 }
 
 #pragma mark - insert a shadow view
@@ -518,13 +571,13 @@
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if (component == 0) {
-        // 选择不同种类时改变incomeType值，以使得dataSource方法中得以判断右边需要多少行,并改变moneyTextField的字体颜色
+        // 选择不同种类时改变incomeType值，以使得dataSource方法中得以判断右边需要多少行,并改变customTextField的字体颜色
         if (row == 0) {
             self.incomeType = @"expense";
-            self.moneyTextField.textColor = [UIColor redColor];
+            self.customTextField.textColor = [UIColor redColor];
         } else {
             self.incomeType = @"income";
-            self.moneyTextField.textColor = [UIColor blueColor];
+            self.customTextField.textColor = [UIColor blueColor];
         }
         [self.pickerView reloadComponent:1];
     } else {

@@ -162,7 +162,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nrO-AS-o5b">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nrO-AS-o5b">
                                                     <rect key="frame" x="84" y="8" width="508" height="34"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -545,9 +545,7 @@
         <scene sceneID="xPi-Iy-s43">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="PV3-Vu-0io" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="记账" image="记账" id="Sk0-24-SZG">
-                        <inset key="imageInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="记账" image="记账" id="Sk0-24-SZG"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rd5-Wt-RZq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -567,9 +565,7 @@
         <scene sceneID="gZJ-99-hoB">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Use-Oc-73q" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="账本" image="账本" id="Cdv-DQ-3BS">
-                        <inset key="imageInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="账本" image="账本" id="Cdv-DQ-3BS"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="y60-t6-RG5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -936,9 +932,7 @@
         <scene sceneID="1CU-hH-Hxh">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rpk-Qw-FHE" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="统计" image="统计" id="e7K-Rd-gfW">
-                        <inset key="imageInsets" minX="4" minY="4" maxX="4" maxY="4"/>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="统计" image="统计" id="e7K-Rd-gfW"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="TZD-sF-cq4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1355,9 +1349,7 @@
         <scene sceneID="awr-dD-hde">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Uws-Uj-h7N" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="设置" image="设置" id="kFI-Y7-7tu">
-                        <inset key="imageInsets" minX="6" minY="6" maxX="6" maxY="6"/>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="设置" image="设置" id="kFI-Y7-7tu"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vvt-Id-LbR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1374,10 +1366,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="统计" width="41" height="42"/>
-        <image name="记账" width="51" height="51"/>
-        <image name="设置" width="50" height="50"/>
-        <image name="账本" width="50" height="46"/>
+        <image name="统计" width="29" height="30"/>
+        <image name="记账" width="30" height="30"/>
+        <image name="设置" width="30" height="30"/>
+        <image name="账本" width="30" height="28"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="YpE-dh-EB9"/>

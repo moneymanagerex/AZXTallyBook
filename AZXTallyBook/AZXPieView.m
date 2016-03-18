@@ -83,6 +83,12 @@
     
     [label sizeToFit];
     
+    // 判断扇形能不能容纳下label的内容
+    // 判断label在垂直于过扇形中点的半径方向的投影是否大于扇形在该处的长度，">"后面用的余弦定理(角度小于180度时有效，故前加一个percent < 0.5的判定)
+    if (percent < 0.5 && label.frame.size.width * fabs(cos(startAngle + M_PI*percent)) > sqrt(2*(radius/2)*(radius/2) - 2*radius/2*radius/2*cos(2*M_PI*percent))) {
+        label.text = @"..";
+    }
+    
     // 找到扇形中心点
     CGFloat centerX = center.x + (radius/2*cos(startAngle + M_PI*percent));
     CGFloat centerY = center.y + (radius/2*sin(startAngle + M_PI*percent));

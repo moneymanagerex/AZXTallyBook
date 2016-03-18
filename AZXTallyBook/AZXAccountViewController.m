@@ -344,9 +344,7 @@
         }
     }
     
-    NSLog(@"sum %@ %f", [NSNumber numberWithDouble:moneySum], moneySum);
-    
-    NSString *moneySumString = [NSString stringWithFormat:@"今日结余: %@", [NSNumber numberWithDouble:moneySum]];
+    NSString *moneySumString = [NSString stringWithFormat:@"今日结余: %@", [NSNumber numberWithDouble:[[NSString stringWithFormat:@"%.2f", moneySum] doubleValue]]];
     
     NSMutableAttributedString *mutString = [[NSMutableAttributedString alloc] initWithString:moneySumString];
     
