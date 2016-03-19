@@ -77,19 +77,20 @@
 - (NSArray *)colors {
     if (!_colors) {
         _colors = @[[UIColor colorWithRed:252/255.0 green:25/255.0 blue:28/255.0 alpha:1],
-                        [UIColor colorWithRed:253/255.0 green:105/255.0 blue:33/255.0 alpha:1],
                         [UIColor colorWithRed:254/255.0 green:200/255.0 blue:46/255.0 alpha:1],
-                        [UIColor colorWithRed:255/255.0 green:245/255.0 blue:54/255.0 alpha:1],
                         [UIColor colorWithRed:217/255.0 green:253/255.0 blue:53/255.0 alpha:1],
-                        [UIColor colorWithRed:140/255.0 green:253/255.0 blue:49/255.0 alpha:1],
                         [UIColor colorWithRed:42/255.0 green:253/255.0 blue:130/255.0 alpha:1],
-                        [UIColor colorWithRed:44/255.0 green:253/255.0 blue:218/255.0 alpha:1],
                         [UIColor colorWithRed:43/255.0 green:244/255.0 blue:253/255.0 alpha:1],
-                        [UIColor colorWithRed:29/255.0 green:166/255.0 blue:250/255.0 alpha:1],
                         [UIColor colorWithRed:18/255.0 green:92/255.0 blue:249/255.0 alpha:1],
-                        [UIColor colorWithRed:142/255.0 green:37/255.0 blue:248/255.0 alpha:1],
                         [UIColor colorWithRed:219/255.0 green:39/255.0 blue:249/255.0 alpha:1],
+                        [UIColor colorWithRed:253/255.0 green:105/255.0 blue:33/255.0 alpha:1],
+                        [UIColor colorWithRed:255/255.0 green:245/255.0 blue:54/255.0 alpha:1],
+                        [UIColor colorWithRed:140/255.0 green:253/255.0 blue:49/255.0 alpha:1],
+                        [UIColor colorWithRed:44/255.0 green:253/255.0 blue:218/255.0 alpha:1],
+                        [UIColor colorWithRed:29/255.0 green:166/255.0 blue:250/255.0 alpha:1],
+                        [UIColor colorWithRed:142/255.0 green:37/255.0 blue:248/255.0 alpha:1],
                         [UIColor colorWithRed:249/255.0 green:31/255.0 blue:181/255.0 alpha:1]];
+                    
     }  // 共14种颜色，从红到紫，呈彩虹状渐变
     return _colors;
 }

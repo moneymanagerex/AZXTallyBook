@@ -12,7 +12,7 @@
 #import "UIViewController+BackButtonHandler.h"
 #import "VENCalculatorInputTextField.h"
 
-@interface AZXNewAccountTableViewController () <UITextViewDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+@interface AZXNewAccountTableViewController () <UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *moneyTextField; // 只是为了标记位置，真正使用的是下面自定义的textField
 
@@ -56,19 +56,17 @@
     [super viewDidAppear:animated];
     
     // 第三方库的自定义数字计算器键盘，将其frame设为moneyTextField的frame，将其完全覆盖
-    if (!self.customTextField) {
-        self.customTextField = [[VENCalculatorInputTextField alloc] initWithFrame:self.moneyTextField.frame];
-        
+    // 如果是在viewdidload中为了弹出键盘而设置的customTextField，则移除并重设
+    // 而如果中途从别的界面切过来，在customTextField已存在(width肯定不为0)的情况下，不再重复加入自定义textField
+    if (self.customTextField.frame.size.width == 0) {
+        // 这里将自定义的键盘覆盖原有的moneyTextField
+        self.customTextField.frame = self.moneyTextField.frame;
+        [[self.moneyTextField superview] bringSubviewToFront:self.customTextField];
+
         self.customTextField.textAlignment = NSTextAlignmentRight;
         self.customTextField.placeholder = @"输入金额";
         self.customTextField.textColor = [UIColor redColor];
         
-        // 设置代理
-        self.customTextField.delegate = self;
-        
-        // 加入自定义的textField，因为frame是其在超类的位置，这里讲自定义的textField加入其超类里面并提前到前面将其覆盖
-        [[self.moneyTextField superview] addSubview:self.customTextField];
-        [[self.moneyTextField superview] bringSubviewToFront:self.customTextField];
     }
     
     
@@ -84,6 +82,9 @@
     
     //一进入界面即弹出键盘输入金额
     [self.customTextField becomeFirstResponder];
+    
+    // 给tableView加上一个Tap手势，使得点击空白处收回键盘，点击相应cell的位置时调用相应的method
+    [self.tableView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapScreen:)]];
 
 }
 
@@ -120,6 +121,12 @@
     
     // 判断是否第一次进入界面
     [self judgeFirstLoadThisView];
+    
+    // 进入界面先弹出键盘(此处只是为了弹出键盘而加入customTextField，在Viewdidappear中是要移除重新赋值的)
+    self.customTextField = [[VENCalculatorInputTextField alloc] initWithFrame:CGRectZero];
+    [[self.moneyTextField superview] addSubview:self.customTextField];
+    [self.customTextField becomeFirstResponder];
+    
 }
 
 - (void)judgeFirstLoadThisView {
@@ -151,6 +158,94 @@
         [self.delegate viewController:self didPassDate:self.dateLabel.text];
     }
     
+}
+
+#pragma mark - tap screen methods
+
+- (void)tapScreen:(UITapGestureRecognizer *)gesture {
+    // 根据点击的位置判断点击的cell在哪一个section和row
+    // 因为此界面高度是写死的，所以通过点击位置的y坐标来判断点击的是哪一个位置(这里没用indexPathForRowAtPoint是因为这个方法判断不准...)
+    // 坐标示意图:
+    // section:0 row:0   y: 99 - 149
+    // section:0 row:1   y: 149 - 199
+    // section:0 row:2   y: 199 - 249
+    // section:0 row:0   y: 285 - 369
+    
+    CGFloat touchY = [gesture locationInView:[self.tableView superview]].y;
+    
+    if (touchY < 99 || touchY > 149) {
+        [self.customTextField resignFirstResponder];
+        // 因为在大于三位数且存在小数点的情况下会默认每隔3位加一个逗号，将逗号都去掉
+        self.customTextField.text = [self deleteDotsInString:self.customTextField.text];
+    }
+    if (touchY < 285 || touchY > 369) {
+        [self.detailTextView resignFirstResponder];
+    }
+    
+    
+    
+    // 根据indexPath的不同执行不同的方法
+    if (touchY >= 99 && touchY <= 149) {
+        //点击输入金额，弹出自定义键盘
+        [self.customTextField becomeFirstResponder];
+    } else if (touchY >= 149 && touchY <= 199) {
+        // 点击类别选择，创建一个类别选择框
+        [self setUpPickerView];
+    } else if (touchY >= 199 && touchY <= 249) {
+        // 点击选择日期，创建一个日期选择框
+        [self setUpDatePicker];
+    } else if (touchY >= 285 && touchY <= 369) {
+        // 点击详细说明，弹出键盘
+        NSLog(@"heehe");
+        [self.detailTextView becomeFirstResponder];
+    }
+}
+
+- (void)setUpDatePicker {
+    // 插入夹层
+    [self insertShadowView];
+    
+    // 初始化一个datePicker并使其居中
+    if (self.datePicker == nil) {
+        self.datePicker = [[UIDatePicker alloc] init];
+        self.datePicker.datePickerMode = UIDatePickerModeDate;
+        self.datePicker.center = self.view.center;
+        self.datePicker.backgroundColor = [UIColor whiteColor];
+        //设为圆角矩形
+        self.datePicker.layer.cornerRadius = 10;
+        self.datePicker.layer.masksToBounds = YES;
+        [self.view addSubview:self.datePicker];
+    } else {
+        [self.view addSubview:self.datePicker];
+    }
+    
+    //添加监听事件
+    [self.datePicker addTarget:self action:@selector(datePickerValueDidChanged:) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)setUpPickerView {
+    // 第一次进入应用时，设置pickerView的默认数据
+    [self setDefaultDataForPickerView];
+    
+    // 插入夹层
+    [self insertShadowView];
+    
+    // 初始化一个pickerView并使其居中
+    if (self.pickerView == nil) {
+        self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 300, 180)];
+        self.pickerView.center = self.view.center;
+        self.pickerView.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:self.pickerView];
+    } else {
+        [self.view addSubview:self.pickerView];
+    }
+    
+    // 设置delegate
+    self.pickerView.delegate = self;
+    self.pickerView.dataSource = self;
+    
+    // 默认显示第一个类别
+    self.typeLabel.text = self.expenseArray[0];
 }
 
 #pragma mark - customize right button
@@ -331,49 +426,7 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 && indexPath.row == 2) {
-        // 初始化一个datePicker并使其居中
-        if (self.datePicker == nil) {
-            self.datePicker = [[UIDatePicker alloc] init];
-            self.datePicker.datePickerMode = UIDatePickerModeDate;
-            self.datePicker.center = self.view.center;
-            self.datePicker.backgroundColor = [UIColor whiteColor];
-            //设为圆角矩形
-            self.datePicker.layer.cornerRadius = 10;
-            self.datePicker.layer.masksToBounds = YES;
-            [self.view addSubview:self.datePicker];
-        } else {
-            [self.view addSubview:self.datePicker];
-        }
-        
-        // 插入夹层
-        [self insertShadowView];
-        
-        //添加监听事件
-        [self.datePicker addTarget:self action:@selector(datePickerValueDidChanged:) forControlEvents:UIControlEventValueChanged];
-    } else if (indexPath.section == 0 && indexPath.row == 1) {
-        // 第一次进入应用时，设置pickerView的默认数据
-        [self setDefaultDataForPickerView];
-
-        // 初始化一个pickerView并使其居中
-        if (self.pickerView == nil) {
-            self.pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 300, 180)];
-            self.pickerView.center = self.view.center;
-            self.pickerView.backgroundColor = [UIColor whiteColor];
-            [self.view addSubview:self.pickerView];
-        } else {
-            [self.view addSubview:self.pickerView];
-        }
-        
-        // 设置delegate
-        self.pickerView.delegate = self;
-        self.pickerView.dataSource = self;
-        
-        // 插入夹层
-        [self insertShadowView];
-        
     }
-}
 
 #pragma mark - insert shadow view and add button
 
@@ -433,16 +486,8 @@
 - (void)pickerSelected {
     self.navigationItem.rightBarButtonItem = nil;
     
-    //取消此行的选择状态
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    //根据点击的indexPath确定是datePicker还是pickerView
-    if (indexPath.row == 1) {
-        [self.pickerView removeFromSuperview];
-    } else if (indexPath.row == 2) {
-        [self.datePicker removeFromSuperview];
-    }
+    [self.pickerView removeFromSuperview];
+    [self.datePicker removeFromSuperview];
     
     //移除遮挡层并销毁
     [self.shadowView removeFromSuperview];
@@ -460,12 +505,6 @@
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
     }
-    
-    // 插入一个透明的夹层View，实现触摸空白区域时返回键盘
-    [self insertTransparentView];
-    
-    [self.shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(textViewResignKeyboard)]];
-
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -475,43 +514,7 @@
     }
 }
 
-
-#pragma mark - custom text field delegate methods
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    //插入一个透明的夹层
-    [self insertTransparentView];
-    [self.shadowView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(customTextFieldResignKeyboard)]];
-}
-
-
-#pragma mark - text view resign first responder
-- (void)textViewResignKeyboard {
-    [self.detailTextView resignFirstResponder];
-    [self.shadowView removeFromSuperview];
-    self.shadowView = nil;
-}
-
-#pragma mark - custom text field resign first responder
-- (void)customTextFieldResignKeyboard {
-    [self.customTextField resignFirstResponder];
-    [self.shadowView removeFromSuperview];
-    self.shadowView = nil;
-    
-    // 因为在大于三位数且存在小数点的情况下会默认每隔3位加一个逗号，将逗号都去掉
-    self.customTextField.text = [self deleteDotsInString:self.customTextField.text];
-    NSLog(@"text %@", self.customTextField.text);
-}
-
 #pragma mark - insert a shadow view
-
-// 插入一个透明的夹层View，实现触摸空白区域时返回键盘（tableView不响应touchesbegin等方法）
-// 此处将view.alpha设为0后就不能点击了，反而是只初始化的view既透明又能点击
-- (void)insertTransparentView {
-    self.shadowView = [[UIView alloc] initWithFrame:self.tableView.frame];
-    [self.tableView addSubview:self.shadowView];
-    [self.tableView bringSubviewToFront:self.shadowView];
-}
 
 //插入一个浅灰色的夹层
 //此处不选择if (view == nil) {...} 是因为别的地方也要用shadowView，为了防止其上添加各种不同的方法使得复杂，所以每次退出就销毁，进来就用全新的
