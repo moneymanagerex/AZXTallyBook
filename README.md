@@ -9,6 +9,6 @@
 - 历史记录查询每一笔支出，汇总每月结余，清楚掌握财产动态
 
 屏幕截图：
-![][https://github.com/XinStar1/AZXTallyBook/screenshots/4.7_1.png]
-![][https://github.com/XinStar1/AZXTallyBook/screenshots/4.7_2.png]
-![][https://github.com/XinStar1/AZXTallyBook/screenshots/4.7_3.png]
+![1][https://github.com/XinStar1/AZXTallyBook/raw/master/screenshots/4.7_1.png]
+![2][https://github.com/XinStar1/AZXTallyBook/raw/master/screenshots/4.7_2.png]
+![3][https://github.com/XinStar1/AZXTallyBook/raw/master/screenshots/4.7_3.png]
