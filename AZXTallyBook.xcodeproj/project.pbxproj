@@ -195,6 +195,7 @@
 		7F057DA81C8D6B28003DA3C7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7F10B8451C99970C00A8F3AF /* UIViewController+BackButtonHandler */,
 				7F057DA91C8D6B28003DA3C7 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -433,7 +434,6 @@
 			children = (
 				7F10B8381C9939CB00A8F3AF /* AZXAddTypeViewController.h */,
 				7F10B8391C9939CB00A8F3AF /* AZXAddTypeViewController.m */,
-				7F10B8451C99970C00A8F3AF /* UIViewController+BackButtonHandler */,
 				7F10B83F1C9942F700A8F3AF /* collectionViewCell */,
 			);
 			name = "添加类别";
