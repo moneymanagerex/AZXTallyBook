@@ -220,7 +220,6 @@
     self.dataArray = [self.managedObjectContext executeFetchRequest:request error:&error];
     
     if (self.dataArray.count == 0) {
-        NSLog(@"null!!!!!!!!!!!!!!!");
         // 如果没有数据，中间显示"暂无数据"
         self.nullLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
         self.nullLabel.text = @"暂无数据";
@@ -265,7 +264,6 @@
     self.uniqueDateArray = [dateSet sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:nil ascending:NO]]];
     
     for (NSString *type in typeSet) {
-        NSLog(@"type %@", type);
         // 从中过滤其中一个类别的所有Account，然后得到一个类别的总金额
         NSArray *array = [tmpAccountArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@", type]];
         

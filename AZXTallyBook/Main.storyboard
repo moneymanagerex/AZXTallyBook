@@ -1366,10 +1366,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="统计" width="29" height="30"/>
-        <image name="记账" width="30" height="30"/>
-        <image name="设置" width="30" height="30"/>
-        <image name="账本" width="30" height="28"/>
+        <image name="统计" width="25" height="26"/>
+        <image name="记账" width="25" height="25"/>
+        <image name="设置" width="25" height="25"/>
+        <image name="账本" width="25" height="23"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="YpE-dh-EB9"/>

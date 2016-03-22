@@ -117,6 +117,8 @@
         self.detailTextView.text = @"详细描述(选填)";
         self.detailTextView.textColor = [UIColor lightGrayColor];
         
+        // 类别默认为支出
+        self.incomeType = @"expense";
     }
     
     // 判断是否第一次进入界面
@@ -135,7 +137,7 @@
     
     if (![self.userDefaults boolForKey:@"haveLoadedAZXNewAccountTableViewController"]) {
         // 第一次进入此页面
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"教程" message:@"输入金额、类别、以及日期，点左上角的保存按钮保存，右上角按钮取消" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"教程" message:@"输入金额、类别、日期以及详细(选填)，点右上角按钮保存" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"知道了，不再提醒" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self.userDefaults setBool:YES forKey:@"haveLoadedAZXNewAccountTableViewController"];
@@ -196,7 +198,6 @@
         [self setUpDatePicker];
     } else if (touchY >= 285 && touchY <= 369) {
         // 点击详细说明，弹出键盘
-        NSLog(@"heehe");
         [self.detailTextView becomeFirstResponder];
     }
 }
@@ -245,7 +246,11 @@
     self.pickerView.dataSource = self;
     
     // 默认显示第一个类别
-    self.typeLabel.text = self.expenseArray[0];
+    if ([self.incomeType isEqualToString:@"expense"]) {
+        self.typeLabel.text = self.expenseArray[0];
+    } else {
+        self.typeLabel.text = self.incomeArray[0];
+    }
 }
 
 #pragma mark - customize right button
@@ -279,8 +284,6 @@
             // 若是必填项都已填好且要记新帐，则将属性保存在CoreData中
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             
-            
-            NSLog(@"insert");
             Account *account = [NSEntityDescription insertNewObjectForEntityForName:@"Account" inManagedObjectContext:appDelegate.managedObjectContext];
             
             account.type = self.typeLabel.text;
@@ -423,11 +426,6 @@
     }
 }
 
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    }
-
 #pragma mark - insert shadow view and add button
 
 - (void)insertShadowView {
@@ -465,10 +463,6 @@
         for (NSString *string in self.expenseArray) {
             [self.userDefaults setObject:string forKey:string];
         }
-    }
-    // 将incomeType默认为支出
-    if (self.incomeType == nil) {
-        self.incomeType = @"expense";
     }
 }
 
@@ -578,9 +572,13 @@
         if (row == 0) {
             self.incomeType = @"expense";
             self.customTextField.textColor = [UIColor redColor];
+            // 当切换到支出选项时，默认显示支出第一个类别的名称(不然的话还得要拉一下才可以)
+            self.typeLabel.text = self.expenseArray[0];
         } else {
             self.incomeType = @"income";
             self.customTextField.textColor = [UIColor blueColor];
+            // 当切换到收入选项时，默认显示收入第一个类别的名称
+            self.typeLabel.text = self.incomeArray[0];
         }
         [self.pickerView reloadComponent:1];
     } else {

@@ -51,6 +51,8 @@
     // 判断是否第一次使用app
     [self judgeFirstLoadThisView];
     
+    NSLog(@"%d", [self.defaults boolForKey:@"appDidLaunch"]);
+    
     // 判断是否需要输入密码
     [self judgeWhetherNeedCode];
 }
@@ -58,7 +60,7 @@
 - (void)judgeFirstLoadThisView {
     if (![self.defaults boolForKey:@"haveLoadedAZXAccountViewController"]) {
         // 第一次进入此页面
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"欢迎使用" message:@"点击红色按钮记录新账，首页显示所选日期的所有账单，点击相应账单可编辑其内容，手指左滑可以删除相应账单" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"欢迎使用简单记账" message:@"点击红色按钮记录新账，首页显示所选日期的所有账单，点击相应账单可编辑其内容，手指左滑可以删除相应账单" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"知道了，不再提醒" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self.defaults setBool:YES forKey:@"haveLoadedAZXAccountViewController"];
@@ -73,6 +75,7 @@
 - (void)judgeWhetherNeedCode {
     if ([self.defaults boolForKey:@"useCodeAZX"] && ![self.defaults boolForKey:@"appDidLaunch"]) {
         // useCodeAZX是在设置界面中设置的，appDidLaunch每次退出应用时都将其设为NO，以便下一次进入应用时如果有使用密码就会弹出对话框要求输入密码
+        NSLog(@"needCode");
         UIAlertController *enterCode = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入密码" preferredStyle:UIAlertControllerStyleAlert];
         [enterCode addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             textField.secureTextEntry = YES;
@@ -336,10 +339,8 @@
     double moneySum = 0;
     for (Account *account in self.fetchedResults) {
         if ([account.incomeType isEqualToString:@"income"]) {
-            NSLog(@"income %f", [account.money doubleValue]);
             moneySum += [account.money doubleValue];
         } else {
-            NSLog(@"expense %f", [account.money doubleValue]);
             moneySum -= [account.money doubleValue];
         }
     }

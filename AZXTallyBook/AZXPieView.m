@@ -56,7 +56,6 @@
 
 - (void)drawSectorWithStartAngle:(double)startAngle Percent:(double)percent Type:(NSString *)type Color:(UIColor *)color {
     CGFloat radius = self.frame.size.width > self.frame.size.height? self.frame.size.height/2 : self.frame.size.width/2;  // 半径取矩形短的一边
-    NSLog(@"%@", NSStringFromCGPoint(self.center));
     // self.center显示是在超类中的位置，要将偏移量减去
     CGPoint center = self.center;
     center.x -= self.frame.origin.x;
@@ -85,7 +84,8 @@
     
     // 判断扇形能不能容纳下label的内容
     // 判断label在垂直于过扇形中点的半径方向的投影是否大于扇形在该处的长度，">"后面用的余弦定理(角度小于180度时有效，故前加一个percent < 0.5的判定)
-    if (percent < 0.5 && label.frame.size.width * fabs(cos(startAngle + M_PI*percent)) > sqrt(2*(radius/2)*(radius/2) - 2*radius/2*radius/2*cos(2*M_PI*percent))) {
+    // 或者只要小于3%的通通设为..
+    if ((percent < 0.5 && label.frame.size.width * fabs(sin(startAngle + M_PI*percent)) > sqrt(2*(radius/2)*(radius/2) - 2*radius/2*radius/2*cos(2*M_PI*percent))) || percent < 0.03) {
         label.text = @"..";
     }
     
