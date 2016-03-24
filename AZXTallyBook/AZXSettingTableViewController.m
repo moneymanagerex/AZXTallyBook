@@ -41,7 +41,6 @@
     self.defaults = [NSUserDefaults standardUserDefaults];
     
     [self judgeFirstLoadThisView];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
