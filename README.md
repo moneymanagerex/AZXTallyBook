@@ -1,2 +1,0 @@
-# AZXTallyBook
-My First App
