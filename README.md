@@ -1,5 +1,6 @@
 # AZXTallyBook
-简单记账 -- 即将在AppStore上线  
+简单记账 -- 已在AppStore上线  
+下载地址：![简单记账](https://itunes.apple.com/cn/app/jian-dan-ji-zhang-si-ren-zhang/id1095015625?mt=8) 
 主要用CoreData实现数据的持久本地化保存  
 应用特点：
 - 极速记账，5秒钟记下一笔帐
