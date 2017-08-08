@@ -179,10 +179,10 @@
 			isa = PBXGroup;
 			children = (
 				7F077CE91C926CC000D85707 /* CoreData */,
-				7F057DE91C8D6C5B003DA3C7 /* 记账 */,
-				7F077CED1C926D4B00D85707 /* 账本 */,
-				7F077D041C93F68E00D85707 /* 统计 */,
-				7F077D561C96C79000D85707 /* 设置 */,
+				7F057DE91C8D6C5B003DA3C7 /* account */,
+				7F077CED1C926D4B00D85707 /* checking */,
+				7F077D041C93F68E00D85707 /* Reporting */,
+				7F077D561C96C79000D85707 /* Setting */,
 				7FE29C961CA3C7A800681ED6 /* Extension */,
 				7F057DB71C8D6B28003DA3C7 /* Assets.xcassets */,
 				7F057DE41C8D6B8E003DA3C7 /* Main.storyboard */,
@@ -219,21 +219,21 @@
 			path = AZXTallyBookUITests;
 			sourceTree = "<group>";
 		};
-		7F057DE91C8D6C5B003DA3C7 /* 记账 */ = {
+		7F057DE91C8D6C5B003DA3C7 /* account */ = {
 			isa = PBXGroup;
 			children = (
-				7F077CF21C926E3100D85707 /* 记账首页 */,
-				7F057DEA1C8D6C7A003DA3C7 /* 新建账单 */,
+				7F077CF21C926E3100D85707 /* start */,
+				7F057DEA1C8D6C7A003DA3C7 /* create */,
 			);
-			name = "记账";
+			name = account;
 			sourceTree = "<group>";
 		};
-		7F057DEA1C8D6C7A003DA3C7 /* 新建账单 */ = {
+		7F057DEA1C8D6C7A003DA3C7 /* create */ = {
 			isa = PBXGroup;
 			children = (
 				7F077CE81C926C9A00D85707 /* Controller */,
 			);
-			name = "新建账单";
+			name = create;
 			sourceTree = "<group>";
 		};
 		7F057DEE1C8DA50C003DA3C7 /* tableViewCell */ = {
@@ -274,14 +274,14 @@
 			name = CoreData;
 			sourceTree = "<group>";
 		};
-		7F077CED1C926D4B00D85707 /* 账本 */ = {
+		7F077CED1C926D4B00D85707 /* checking */ = {
 			isa = PBXGroup;
 			children = (
-				7F077CF31C926E5200D85707 /* 全部记录 */,
-				7F077CFB1C92B0DD00D85707 /* 每月记录 */,
+				7F077CF31C926E5200D85707 /* all */,
+				7F077CFB1C92B0DD00D85707 /* monthly */,
 				7F077CF71C926FDB00D85707 /* tableViewCell */,
 			);
-			name = "账本";
+			name = checking;
 			sourceTree = "<group>";
 		};
 		7F077CEE1C926D5900D85707 /* Controller */ = {
@@ -293,21 +293,21 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
-		7F077CF21C926E3100D85707 /* 记账首页 */ = {
+		7F077CF21C926E3100D85707 /* start */ = {
 			isa = PBXGroup;
 			children = (
 				7F077CE71C926C7200D85707 /* Controller */,
 				7F057DEE1C8DA50C003DA3C7 /* tableViewCell */,
 			);
-			name = "记账首页";
+			name = start;
 			sourceTree = "<group>";
 		};
-		7F077CF31C926E5200D85707 /* 全部记录 */ = {
+		7F077CF31C926E5200D85707 /* all */ = {
 			isa = PBXGroup;
 			children = (
 				7F077CEE1C926D5900D85707 /* Controller */,
 			);
-			name = "全部记录";
+			name = all;
 			sourceTree = "<group>";
 		};
 		7F077CF71C926FDB00D85707 /* tableViewCell */ = {
@@ -319,12 +319,12 @@
 			name = tableViewCell;
 			sourceTree = "<group>";
 		};
-		7F077CFB1C92B0DD00D85707 /* 每月记录 */ = {
+		7F077CFB1C92B0DD00D85707 /* monthly */ = {
 			isa = PBXGroup;
 			children = (
 				7F077D001C92C97C00D85707 /* Controller */,
 			);
-			name = "每月记录";
+			name = monthly;
 			sourceTree = "<group>";
 		};
 		7F077D001C92C97C00D85707 /* Controller */ = {
@@ -336,14 +336,14 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
-		7F077D041C93F68E00D85707 /* 统计 */ = {
+		7F077D041C93F68E00D85707 /* Reporting */ = {
 			isa = PBXGroup;
 			children = (
-				7F077D4D1C966B5600D85707 /* 饼状图 */,
+				7F077D4D1C966B5600D85707 /* pie */,
 				7F077D4C1C9516D200D85707 /* pieTableViewCell */,
-				7F077D511C966B8500D85707 /* 类型详细 */,
+				7F077D511C966B8500D85707 /* detail */,
 			);
-			name = "统计";
+			name = Reporting;
 			sourceTree = "<group>";
 		};
 		7F077D081C940B9C00D85707 /* Controller */ = {
@@ -373,51 +373,51 @@
 			name = pieTableViewCell;
 			sourceTree = "<group>";
 		};
-		7F077D4D1C966B5600D85707 /* 饼状图 */ = {
+		7F077D4D1C966B5600D85707 /* pie */ = {
 			isa = PBXGroup;
 			children = (
 				7F077D081C940B9C00D85707 /* Controller */,
 				7F077D091C940BA700D85707 /* PieView */,
 			);
-			name = "饼状图";
+			name = pie;
 			sourceTree = "<group>";
 		};
-		7F077D511C966B8500D85707 /* 类型详细 */ = {
+		7F077D511C966B8500D85707 /* detail */ = {
 			isa = PBXGroup;
 			children = (
 				7F077D4E1C966B8000D85707 /* AZXTypeDetailViewController.h */,
 				7F077D4F1C966B8000D85707 /* AZXTypeDetailViewController.m */,
 			);
-			name = "类型详细";
+			name = detail;
 			sourceTree = "<group>";
 		};
-		7F077D551C96C74C00D85707 /* 设置首页 */ = {
+		7F077D551C96C74C00D85707 /* general */ = {
 			isa = PBXGroup;
 			children = (
 				7F077D521C96C73F00D85707 /* AZXSettingTableViewController.h */,
 				7F077D531C96C73F00D85707 /* AZXSettingTableViewController.m */,
 			);
-			name = "设置首页";
+			name = general;
 			sourceTree = "<group>";
 		};
-		7F077D561C96C79000D85707 /* 设置 */ = {
+		7F077D561C96C79000D85707 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				7F077D551C96C74C00D85707 /* 设置首页 */,
-				7F077D5A1C96D38300D85707 /* 类别管理 */,
-				7F10B83B1C9939D000A8F3AF /* 添加类别 */,
+				7F077D551C96C74C00D85707 /* general */,
+				7F077D5A1C96D38300D85707 /* catgorymanage */,
+				7F10B83B1C9939D000A8F3AF /* addcategory */,
 			);
-			name = "设置";
+			name = Setting;
 			sourceTree = "<group>";
 		};
-		7F077D5A1C96D38300D85707 /* 类别管理 */ = {
+		7F077D5A1C96D38300D85707 /* catgorymanage */ = {
 			isa = PBXGroup;
 			children = (
 				7F077D571C96D37C00D85707 /* AZXOperateTypeTableViewController.h */,
 				7F077D581C96D37C00D85707 /* AZXOperateTypeTableViewController.m */,
 				7F077D5E1C96D48800D85707 /* operateTableViewCell */,
 			);
-			name = "类别管理";
+			name = catgorymanage;
 			sourceTree = "<group>";
 		};
 		7F077D5E1C96D48800D85707 /* operateTableViewCell */ = {
@@ -429,14 +429,14 @@
 			name = operateTableViewCell;
 			sourceTree = "<group>";
 		};
-		7F10B83B1C9939D000A8F3AF /* 添加类别 */ = {
+		7F10B83B1C9939D000A8F3AF /* addcategory */ = {
 			isa = PBXGroup;
 			children = (
 				7F10B8381C9939CB00A8F3AF /* AZXAddTypeViewController.h */,
 				7F10B8391C9939CB00A8F3AF /* AZXAddTypeViewController.m */,
 				7F10B83F1C9942F700A8F3AF /* collectionViewCell */,
 			);
-			name = "添加类别";
+			name = addcategory;
 			sourceTree = "<group>";
 		};
 		7F10B83F1C9942F700A8F3AF /* collectionViewCell */ = {
@@ -533,7 +533,7 @@
 		7F057D9D1C8D6B28003DA3C7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = azx;
 				TargetAttributes = {
 					7F057DA41C8D6B28003DA3C7 = {
@@ -732,8 +732,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -778,8 +780,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "";
